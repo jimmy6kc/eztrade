@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import BottomNav from "@/components/BottomNav";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -322,7 +321,6 @@ export default function StrategiesPage() {
           ))}
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 }

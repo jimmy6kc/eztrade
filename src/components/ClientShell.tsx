@@ -3,19 +3,21 @@
 import { usePathname } from "next/navigation";
 import { I18nProvider } from "@/lib/i18n-context";
 import TopHeader from "@/components/TopHeader";
+import BottomNav from "@/components/BottomNav";
 
-const HIDE_HEADER_ROUTES = ["/landing"];
+const HIDE_CHROME_ROUTES = ["/landing", "/login", "/pricing"];
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideHeader = HIDE_HEADER_ROUTES.includes(pathname);
+  const hideChrome = HIDE_CHROME_ROUTES.includes(pathname);
 
   return (
     <I18nProvider>
-      {!hideHeader && <TopHeader />}
-      <main className={hideHeader ? "" : "pt-top-header"}>
+      {!hideChrome && <TopHeader />}
+      <main className={hideChrome ? "" : "pt-top-header pb-16"}>
         {children}
       </main>
+      {!hideChrome && <BottomNav />}
     </I18nProvider>
   );
 }

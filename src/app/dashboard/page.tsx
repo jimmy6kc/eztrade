@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import BottomNav from "@/components/BottomNav";
 
 interface LocalTrade {
   id: string;
@@ -223,7 +222,6 @@ export default function DashboardPage() {
           </>
         )}
       </div>
-      <BottomNav />
     </div>
   );
 }

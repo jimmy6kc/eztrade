@@ -8,7 +8,6 @@ import { useQuote } from "@/hooks/useQuote";
 import { useAuth } from "@/lib/auth";
 import { canUseLivePrices, canUseCalc, TIER_FEATURES } from "@/lib/membership";
 import { useI18n } from "@/lib/i18n-context";
-import BottomNav from "@/components/BottomNav";
 import Link from "next/link";
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -853,7 +852,6 @@ export default function CalculatorPage() {
         )}
       </div>
 
-      <BottomNav />
     </div>
   );
 }

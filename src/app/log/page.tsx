@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import BottomNav from "@/components/BottomNav";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -784,7 +783,6 @@ export default function LogPage() {
         </div>
       )}
 
-      <BottomNav />
     </div>
   );
 }
