@@ -48,10 +48,10 @@ export async function POST(request: NextRequest) {
     const uid = userDoc.id;
     const userData = userDoc.data();
 
-    // --- Verify Premium tier -------------------------------------------------
-    if (userData.tier !== "premium") {
+    // --- Verify Pro tier -----------------------------------------------------
+    if (userData.tier !== "pro" && userData.tier !== "premium") {
       return Response.json(
-        { error: "TradingView integration requires Premium tier" },
+        { error: "TradingView integration requires Pro tier" },
         { status: 403 }
       );
     }

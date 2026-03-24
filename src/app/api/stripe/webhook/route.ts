@@ -7,8 +7,9 @@ import type Stripe from "stripe";
 // Price-to-tier mapping
 // ---------------------------------------------------------------------------
 
-function tierForPriceId(priceId: string): "pro" | "premium" | "free" {
-  if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) return "premium";
+function tierForPriceId(priceId: string): "pro" | "free" {
+  // Both legacy premium and current pro price IDs map to "pro"
+  if (priceId === process.env.STRIPE_PREMIUM_PRICE_ID) return "pro";
   if (priceId === process.env.STRIPE_PRO_PRICE_ID) return "pro";
   return "free";
 }

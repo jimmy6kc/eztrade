@@ -97,7 +97,7 @@ export default function CalculatorPage() {
 
   // Live price
   const { tier } = useAuth();
-  const isPro = tier === "pro" || tier === "premium";
+  const isPro = tier === "pro";
   const maxCalcs = TIER_FEATURES[tier].maxCalcsPerDay;
   const isPremium = canUseLivePrices(tier);
 

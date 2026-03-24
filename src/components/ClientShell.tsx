@@ -14,7 +14,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   return (
     <I18nProvider>
       {!hideChrome && <TopHeader />}
-      <main className={hideChrome ? "" : "pt-top-header pb-16"}>
+      <main className={hideChrome ? "" : "pt-top-header"}>
         {children}
       </main>
       {!hideChrome && <BottomNav />}

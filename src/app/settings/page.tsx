@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { SUPPORTED_LANGUAGES, type LangCode } from "@/lib/i18n";
+import type { LangCode } from "@/lib/i18n";
 import Link from "next/link";
 
 const SETTINGS_KEY = "eztrade_settings";
@@ -125,7 +125,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex-1 px-4 py-4">
+    <div className="flex-1 px-4 py-4 pb-nav">
       <div className="max-w-lg mx-auto space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between">

@@ -21,13 +21,13 @@ export async function GET(request: NextRequest) {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
     const uid = decoded.uid;
 
-    // --- Verify Premium tier -------------------------------------------------
+    // --- Verify Pro tier -----------------------------------------------------
     const userSnap = await getAdminDb().collection("users").doc(uid).get();
     const userData = userSnap.data();
 
-    if (userData?.tier !== "premium") {
+    if (userData?.tier !== "pro" && userData?.tier !== "premium") {
       return Response.json(
-        { error: "IBKR integration requires Premium tier" },
+        { error: "IBKR integration requires Pro tier" },
         { status: 403 }
       );
     }

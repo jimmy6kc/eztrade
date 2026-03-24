@@ -3,6 +3,7 @@
 import { useAuth } from "@/lib/auth";
 import { TIER_FEATURES } from "@/lib/membership";
 import type { Tier } from "@/lib/auth";
+import { auth } from "@/lib/firebase";
 import Link from "next/link";
 
 const PLANS: {
@@ -66,9 +67,17 @@ export default function PricingPage() {
       return;
     }
     try {
+      const idToken = await auth.currentUser?.getIdToken();
+      if (!idToken) {
+        window.location.href = "/login";
+        return;
+      }
       const res = await fetch("/api/stripe/create-checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
         body: JSON.stringify({ priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID || "" }),
       });
       const data = await res.json();
