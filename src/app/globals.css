@@ -1,26 +1,336 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ── Theme tokens (Tailwind v4 inline theme) ─────────────────── */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--card);
+  --color-card-border: var(--border);
+  --color-accent: var(--accent);
+  --color-profit: var(--profit);
+  --color-loss: var(--loss);
+  --color-warn: var(--warn);
+  --color-muted: var(--muted);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Dark theme (default) ────────────────────────────────────── */
+
+:root {
+  --bg: #0f1923;
+  --card: #1a2734;
+  --border: #2d3e50;
+  --text: #e0e6ed;
+  --text-secondary: #8899aa;
+  --accent: #4a90d9;
+  --accent-hover: #5ba0e9;
+  --profit: #4caf50;
+  --loss: #f44336;
+  --warn: #f9a825;
+  --muted: #8899aa;
+  --input-bg: #0d1520;
+  --input-border: #2d3e50;
+  --badge-bg: rgba(74, 144, 217, 0.15);
+  --badge-text: #4a90d9;
+  --overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* ── Light theme ─────────────────────────────────────────────── */
+
+[data-theme="light"] {
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --border: #d0d7de;
+  --text: #1a1a2e;
+  --text-secondary: #57606a;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --profit: #16a34a;
+  --loss: #dc2626;
+  --warn: #ca8a04;
+  --muted: #6b7280;
+  --input-bg: #ffffff;
+  --input-border: #d0d7de;
+  --badge-bg: rgba(37, 99, 235, 0.1);
+  --badge-text: #2563eb;
+  --overlay: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Base styles ─────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Inputs ──────────────────────────────────────────────────── */
+
+input,
+select,
+textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+}
+
+input::placeholder {
+  color: var(--muted);
+}
+
+/* ── Tooltip ─────────────────────────────────────────────────── */
+
+.field-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--muted);
+  font-size: 10px;
+  cursor: help;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.field-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  max-width: 220px;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  line-height: 1.4;
+}
+
+.field-tip:hover::after {
+  opacity: 1;
+}
+
+/* ── Ticker dropdown ─────────────────────────────────────────── */
+
+.ticker-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  z-index: 50;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ticker-dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  transition: background 0.1s;
+}
+
+.ticker-dropdown-item:hover,
+.ticker-dropdown-item.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ticker-dropdown-item .symbol {
+  font-weight: 600;
+}
+
+.ticker-dropdown-item .name {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.ticker-dropdown-item:hover .name,
+.ticker-dropdown-item.active .name {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ── Price bar visualization ─────────────────────────────────── */
+
+.price-bar {
+  position: relative;
+  height: 32px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+}
+
+.price-bar-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* ── Animations ──────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.25s ease-out;
+}
+
+/* ── Toggle switch ───────────────────────────────────────────── */
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-switch.active {
+  background: var(--accent);
+}
+
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(20px);
+}
+
+/* ── Badge ───────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-open {
+  border: 1px solid var(--profit);
+  color: var(--profit);
+}
+
+.badge-win {
+  background: var(--profit);
+  color: #fff;
+}
+
+.badge-loss {
+  background: var(--loss);
+  color: #fff;
+}
+
+.badge-be {
+  background: var(--warn);
+  color: #000;
+}
+
+/* ── Bottom nav safe area ────────────────────────────────────── */
+
+.pb-nav {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
