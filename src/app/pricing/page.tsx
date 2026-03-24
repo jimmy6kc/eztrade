@@ -43,7 +43,7 @@ const CHECK_FEATURES = [
 
 export default function PricingPage() {
   const { user, tier } = useAuth();
-  const [yearly, setYearly] = useState(false);
+  const [yearly, setYearly] = useState(true);
 
   const handleSubscribe = async (planTier: Tier) => {
     if (planTier === "free") return;
@@ -75,11 +75,6 @@ export default function PricingPage() {
     }
   };
 
-  const proPrice = yearly
-    ? `$${PRO_YEARLY_PRICE.toFixed(2)}`
-    : `$${PRO_MONTHLY_PRICE.toFixed(2)}`;
-  const proPriceNote = yearly ? "/year" : "/month";
-
   return (
     <div className="flex-1 px-4 py-6">
       <div className="max-w-lg mx-auto space-y-6">
@@ -96,6 +91,20 @@ export default function PricingPage() {
           </p>
         </div>
 
+        {/* Urgency banner */}
+        <div className="text-center mb-3">
+          <span
+            className="inline-block text-[13px] font-bold px-4 py-1.5 rounded-full"
+            style={{
+              color: "var(--warn)",
+              background: "rgba(249,168,37,0.1)",
+              animation: "pulseLabel 2s ease-in-out infinite",
+            }}
+          >
+            {"\uD83D\uDD25"} Limited time: Save 21% with annual billing
+          </span>
+        </div>
+
         {/* Billing toggle */}
         <div className="flex items-center justify-center gap-3">
           <span
@@ -108,7 +117,7 @@ export default function PricingPage() {
             onClick={() => setYearly((v) => !v)}
             className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
             style={{
-              background: yearly ? "var(--accent)" : "var(--border)",
+              background: yearly ? "var(--profit)" : "var(--border)",
             }}
             aria-label="Toggle yearly billing"
           >
@@ -133,7 +142,7 @@ export default function PricingPage() {
               color: "var(--profit)",
             }}
           >
-            Save 21%
+            Get 2 months free!
           </span>
         </div>
 
@@ -204,34 +213,63 @@ export default function PricingPage() {
 
           {/* Pro plan */}
           <div
-            className="rounded-xl p-4 relative"
+            className={`rounded-xl p-4 relative${yearly ? " yearly-glow" : ""}`}
             style={{
               background: "var(--card)",
-              border: "2px solid var(--accent)",
+              border: yearly ? "2px solid var(--profit)" : "2px solid var(--accent)",
+              transition: "border-color 0.3s, box-shadow 0.3s",
             }}
           >
             <div
               className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-bold"
-              style={{ background: "var(--accent)", color: "#fff" }}
+              style={{
+                background: yearly ? "var(--profit)" : "var(--accent)",
+                color: "#fff",
+                transition: "background 0.3s",
+              }}
             >
-              POPULAR
+              {yearly ? "BEST VALUE" : "POPULAR"}
             </div>
 
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-bold">Pro</h3>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-2xl font-bold" style={{ color: "var(--accent)" }}>
-                    {proPrice}
-                  </span>
-                  <span className="text-xs" style={{ color: "var(--muted)" }}>
-                    {proPriceNote}
-                  </span>
-                </div>
-                {yearly && (
-                  <p className="text-[11px] mt-0.5" style={{ color: "var(--profit)" }}>
-                    ${PRO_YEARLY_MONTHLY_EQUIV.toFixed(2)}/mo &mdash; Save 21%
-                  </p>
+                {yearly ? (
+                  <>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className="text-sm font-medium" style={{ color: "var(--muted)", textDecoration: "line-through" }}>
+                        $119.88/yr
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold" style={{ color: "var(--profit)", transition: "font-size 0.3s" }}>
+                        $94.95
+                      </span>
+                      <span className="text-xs" style={{ color: "var(--muted)" }}>
+                        /year
+                      </span>
+                    </div>
+                    <p className="text-xs font-bold mt-1" style={{ color: "var(--profit)" }}>
+                      You save $24.93
+                    </p>
+                    <p className="text-[11px] mt-0.5" style={{ color: "var(--muted)" }}>
+                      ${PRO_YEARLY_MONTHLY_EQUIV.toFixed(2)}/mo &mdash; Get 2 months free!
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-1 mt-1">
+                      <span className="text-2xl font-bold" style={{ color: "var(--accent)", opacity: 0.85 }}>
+                        $9.99
+                      </span>
+                      <span className="text-xs" style={{ color: "var(--muted)" }}>
+                        /month
+                      </span>
+                    </div>
+                    <p className="text-[11px] mt-1" style={{ color: "var(--warn)" }}>
+                      {"\u2191"} Switch to yearly and save $24.93
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -247,11 +285,12 @@ export default function PricingPage() {
                   onClick={() => handleSubscribe("pro")}
                   className="px-4 py-2 rounded-lg text-xs font-semibold transition-colors"
                   style={{
-                    background: "var(--accent)",
+                    background: yearly ? "var(--profit)" : "var(--accent)",
                     color: "#fff",
+                    transition: "background 0.3s",
                   }}
                 >
-                  Subscribe
+                  {yearly ? "Get 2 Months Free" : "Subscribe"}
                 </button>
               )}
             </div>

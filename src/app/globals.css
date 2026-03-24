@@ -1057,6 +1057,48 @@ input::placeholder {
   50% { transform: scale(1.06); opacity: 0.9; }
 }
 
+/* ── Yearly pricing glow ─────────────────────────────────────────── */
+
+.yearly-glow {
+  box-shadow:
+    0 0 20px rgba(76, 175, 80, 0.15),
+    0 0 40px rgba(76, 175, 80, 0.08);
+  animation: yearlyGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes yearlyGlow {
+  0% {
+    box-shadow:
+      0 0 20px rgba(76, 175, 80, 0.12),
+      0 0 40px rgba(76, 175, 80, 0.06);
+  }
+  100% {
+    box-shadow:
+      0 0 28px rgba(76, 175, 80, 0.22),
+      0 0 56px rgba(76, 175, 80, 0.1);
+  }
+}
+
+[data-theme="light"] .yearly-glow {
+  box-shadow:
+    0 0 20px rgba(22, 163, 74, 0.12),
+    0 0 40px rgba(22, 163, 74, 0.06);
+  animation: yearlyGlowLight 3s ease-in-out infinite alternate;
+}
+
+@keyframes yearlyGlowLight {
+  0% {
+    box-shadow:
+      0 0 20px rgba(22, 163, 74, 0.1),
+      0 0 40px rgba(22, 163, 74, 0.05);
+  }
+  100% {
+    box-shadow:
+      0 0 28px rgba(22, 163, 74, 0.18),
+      0 0 56px rgba(22, 163, 74, 0.08);
+  }
+}
+
 /* ── Responsive ─────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {

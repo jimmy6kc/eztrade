@@ -183,7 +183,7 @@ const PRO_FEATURES = [
 /* ------------------------------------------------------------------ */
 
 export default function LandingPage() {
-  const [yearly, setYearly] = useState(false);
+  const [yearly, setYearly] = useState(true);
 
   return (
     <div className="landing-root">
@@ -334,6 +334,22 @@ export default function LandingPage() {
             Start with a 3-day free trial. Upgrade when you&#39;re ready.
           </p>
 
+          {/* Urgency banner */}
+          <div style={{ textAlign: "center", marginBottom: 12 }}>
+            <span style={{
+              display: "inline-block",
+              fontSize: 13,
+              fontWeight: 700,
+              color: "var(--warn)",
+              background: "rgba(249,168,37,0.1)",
+              padding: "6px 16px",
+              borderRadius: 9999,
+              animation: "pulseLabel 2s ease-in-out infinite",
+            }}>
+              {"\uD83D\uDD25"} Limited time: Save 21% with annual billing
+            </span>
+          </div>
+
           {/* Billing toggle */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 24 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--muted)" : "var(--text)" }}>
@@ -348,10 +364,11 @@ export default function LandingPage() {
                 height: 24,
                 width: 44,
                 borderRadius: 9999,
-                background: yearly ? "var(--accent)" : "var(--border)",
+                background: yearly ? "var(--profit)" : "var(--border)",
                 border: "none",
                 cursor: "pointer",
                 padding: 0,
+                transition: "background 0.2s",
               }}
               aria-label="Toggle yearly billing"
             >
@@ -380,7 +397,7 @@ export default function LandingPage() {
                 color: "var(--profit)",
               }}
             >
-              Save 21%
+              Get 2 months free!
             </span>
           </div>
 
@@ -410,26 +427,63 @@ export default function LandingPage() {
 
             {/* Pro */}
             <div
-              className="landing-price-card landing-price-card-highlight"
-              style={{ background: "var(--card)", border: "2px solid var(--accent)" }}
+              className={`landing-price-card landing-price-card-highlight${yearly ? " yearly-glow" : ""}`}
+              style={{
+                background: "var(--card)",
+                border: yearly ? "2px solid var(--profit)" : "2px solid var(--accent)",
+                transition: "border-color 0.3s, box-shadow 0.3s",
+              }}
             >
-              <div className="landing-price-badge" style={{ background: "var(--accent)", color: "#fff" }}>
-                POPULAR
+              <div className="landing-price-badge" style={{
+                background: yearly ? "var(--profit)" : "var(--accent)",
+                color: "#fff",
+                transition: "background 0.3s",
+              }}>
+                {yearly ? "BEST VALUE" : "POPULAR"}
               </div>
               <div className="landing-price-header">
                 <h3 className="landing-price-name">Pro</h3>
-                <div className="landing-price-amount">
-                  <span className="landing-price-dollar" style={{ color: "var(--accent)" }}>
-                    {yearly ? "$94.95" : "$9.99"}
-                  </span>
-                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                    {yearly ? "/year" : "/month"}
-                  </span>
-                </div>
-                {yearly && (
-                  <p style={{ fontSize: 11, marginTop: 2, color: "var(--profit)" }}>
-                    $7.91/mo &mdash; Save 21%
-                  </p>
+                {yearly ? (
+                  <>
+                    <div className="landing-price-amount" style={{ alignItems: "center", gap: 8 }}>
+                      <span style={{
+                        fontSize: 16,
+                        fontWeight: 500,
+                        color: "var(--muted)",
+                        textDecoration: "line-through",
+                      }}>
+                        $119.88/yr
+                      </span>
+                    </div>
+                    <div className="landing-price-amount">
+                      <span className="landing-price-dollar" style={{ color: "var(--profit)", fontSize: 42, transition: "font-size 0.3s" }}>
+                        $94.95
+                      </span>
+                      <span className="landing-price-period" style={{ color: "var(--muted)" }}>
+                        /year
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 12, marginTop: 4, color: "var(--profit)", fontWeight: 700 }}>
+                      You save $24.93
+                    </p>
+                    <p style={{ fontSize: 11, marginTop: 2, color: "var(--muted)" }}>
+                      $7.91/mo &mdash; Get 2 months free!
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="landing-price-amount">
+                      <span className="landing-price-dollar" style={{ color: "var(--accent)", opacity: 0.85 }}>
+                        $9.99
+                      </span>
+                      <span className="landing-price-period" style={{ color: "var(--muted)" }}>
+                        /month
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 11, marginTop: 4, color: "var(--warn)" }}>
+                      {"\u2191"} Switch to yearly and save $24.93
+                    </p>
+                  </>
                 )}
               </div>
               <ul className="landing-price-features">
@@ -440,9 +494,13 @@ export default function LandingPage() {
               <Link
                 href="/login"
                 className="landing-price-btn"
-                style={{ background: "var(--accent)", color: "#fff" }}
+                style={{
+                  background: yearly ? "var(--profit)" : "var(--accent)",
+                  color: "#fff",
+                  transition: "background 0.3s",
+                }}
               >
-                Upgrade to Pro
+                {yearly ? "Get 2 Months Free" : "Upgrade to Pro"}
               </Link>
             </div>
           </div>
