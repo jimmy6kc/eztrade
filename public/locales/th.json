@@ -103,5 +103,6 @@
   "enabled": "เปิดใช้งาน",
   "daily_risk_used": "ความเสี่ยงวันนี้",
   "daily_loss": "ขาดทุนวันนี้",
-  "max_dd": "DD สูงสุด"
+  "max_dd": "DD สูงสุด",
+  "nav_settings": "ตั้งค่า"
 }

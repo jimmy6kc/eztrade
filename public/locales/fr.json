@@ -103,5 +103,6 @@
   "enabled": "Activé",
   "daily_risk_used": "Risque du Jour",
   "daily_loss": "Perte du Jour",
-  "max_dd": "DD Max"
+  "max_dd": "DD Max",
+  "nav_settings": "Param."
 }

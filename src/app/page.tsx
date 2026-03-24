@@ -6,8 +6,10 @@ import { CONTRACTS, type ContractSymbol } from "@/lib/contracts";
 import { US_STOCKS, type StockTuple } from "@/lib/stocks";
 import { useQuote } from "@/hooks/useQuote";
 import { useAuth } from "@/lib/auth";
-import { canUseLivePrices } from "@/lib/membership";
+import { canUseLivePrices, canUseCalc, TIER_FEATURES } from "@/lib/membership";
+import { useI18n } from "@/lib/i18n-context";
 import BottomNav from "@/components/BottomNav";
+import Link from "next/link";
 
 // ── Helpers ───────────────────────────────────────────────────
 
@@ -25,9 +27,38 @@ function Tip({ text }: { text: string }) {
   return <span className="field-tip" data-tip={text}>?</span>;
 }
 
+// ── Calculation rate-limiting helpers ────────────────────────
+const CALC_COUNT_KEY = "eztrade_calc_count";
+
+function getTodayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getCalcCount(): number {
+  try {
+    const raw = localStorage.getItem(CALC_COUNT_KEY);
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    if (parsed.date !== getTodayKey()) return 0;
+    return parsed.count ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+function incrementCalcCount(): number {
+  const today = getTodayKey();
+  const current = getCalcCount();
+  const next = current + 1;
+  localStorage.setItem(CALC_COUNT_KEY, JSON.stringify({ date: today, count: next }));
+  return next;
+}
+
 // ── Component ─────────────────────────────────────────────────
 
 export default function CalculatorPage() {
+  const { T } = useI18n();
+
   // Mode
   const [mode, setMode] = useState<"stock" | "futures">("stock");
   const [dir, setDir] = useState<"long" | "short">("long");
@@ -61,9 +92,24 @@ export default function CalculatorPage() {
   // Results
   const [result, setResult] = useState<CalcResult | null>(null);
 
+  // Calculation rate limiting
+  const [calcCount, setCalcCount] = useState(0);
+  const [limitReached, setLimitReached] = useState(false);
+
   // Live price
   const { tier } = useAuth();
+  const isPro = tier === "pro" || tier === "premium";
+  const maxCalcs = TIER_FEATURES[tier].maxCalcsPerDay;
   const isPremium = canUseLivePrices(tier);
+
+  // Load calc count on mount
+  useEffect(() => {
+    const count = getCalcCount();
+    setCalcCount(count);
+    if (!isPro && count >= maxCalcs) {
+      setLimitReached(true);
+    }
+  }, [isPro, maxCalcs]);
   const { price: quoteData, loading: quoteLoading } = useQuote(
     isPremium && ticker ? ticker : ""
   );
@@ -119,9 +165,18 @@ export default function CalculatorPage() {
     [tpPcts]
   );
 
-  // ── Auto-calculate ──────────────────────────────────────────
+  // ── Calculate (manual trigger) ─────────────────────────────
 
-  useEffect(() => {
+  const handleCalculate = useCallback(() => {
+    // Check rate limit for free users
+    if (!isPro) {
+      const count = getCalcCount();
+      if (count >= maxCalcs) {
+        setLimitReached(true);
+        return;
+      }
+    }
+
     const entryNum = parseFloat(entry);
     const slNum = parseFloat(sl);
     if (!entryNum || isNaN(slNum)) {
@@ -153,7 +208,16 @@ export default function CalculatorPage() {
     };
 
     setResult(calculate(input));
-  }, [mode, dir, entry, sl, riskAmount, fee, contract, tpCount, tpPrices, tpPcts]);
+
+    // Increment count for free users
+    if (!isPro) {
+      const newCount = incrementCalcCount();
+      setCalcCount(newCount);
+      if (newCount >= maxCalcs) {
+        setLimitReached(true);
+      }
+    }
+  }, [isPro, maxCalcs, entry, sl, tpCount, tpPrices, tpPcts, mode, dir, riskAmount, fee, contract]);
 
   // ── TP price setters ────────────────────────────────────────
 
@@ -305,7 +369,7 @@ export default function CalculatorPage() {
                 border: `1px solid ${mode === m ? "var(--accent)" : "var(--border)"}`,
               }}
             >
-              {m === "stock" ? "Stock" : "Futures"}
+              {m === "stock" ? T("stock") : T("futures")}
             </button>
           ))}
         </div>
@@ -313,7 +377,7 @@ export default function CalculatorPage() {
         {/* Direction */}
         <div>
           <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-            Direction <Tip text="Long = buy low, sell high. Short = sell high, buy low." />
+            {T("direction")} <Tip text={T("tip_direction")} />
           </label>
           <div className="flex gap-2 mt-1">
             {(["long", "short"] as const).map((d) => (
@@ -327,7 +391,7 @@ export default function CalculatorPage() {
                   border: `1px solid ${dir === d ? (d === "long" ? "var(--profit)" : "var(--loss)") : "var(--border)"}`,
                 }}
               >
-                {d === "long" ? "Long" : "Short"}
+                {d === "long" ? T("long") : T("short")}
               </button>
             ))}
           </div>
@@ -337,7 +401,7 @@ export default function CalculatorPage() {
         {mode === "futures" && (
           <div>
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Contract <Tip text="Select the futures contract you are trading." />
+              {T("contract")} <Tip text="Select the futures contract you are trading." />
             </label>
             <select
               value={contract}
@@ -356,7 +420,7 @@ export default function CalculatorPage() {
         {/* Ticker */}
         <div className="relative">
           <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-            Ticker <Tip text="Search for a stock symbol or name." />
+            {T("ticker")} <Tip text={T("tip_ticker")} />
           </label>
           <input
             ref={tickerRef}
@@ -455,7 +519,7 @@ export default function CalculatorPage() {
         {/* Risk presets */}
         <div>
           <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-            Risk Amount <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Maximum dollar amount you are willing to lose on this trade." />
+            {T("risk_amount")} <span style={{ color: "var(--loss)" }}>*</span> <Tip text={T("tip_risk")} />
           </label>
           <div className="flex flex-wrap gap-1.5 mt-1">
             {RISK_PRESETS.map((r) => (
@@ -486,7 +550,7 @@ export default function CalculatorPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Entry Price <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Your planned entry price." />
+              {T("entry_price")} <span style={{ color: "var(--loss)" }}>*</span> <Tip text={T("tip_entry")} />
             </label>
             <input
               type="number"
@@ -499,7 +563,7 @@ export default function CalculatorPage() {
           </div>
           <div>
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Stop Loss <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Your stop loss price. Position size is calculated from this." />
+              {T("sl_price")} <span style={{ color: "var(--loss)" }}>*</span> <Tip text={T("tip_sl")} />
             </label>
             <input
               type="number"
@@ -516,7 +580,7 @@ export default function CalculatorPage() {
         <div>
           <div className="flex items-center justify-between">
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Take Profit Targets <Tip text="Set up to 5 TP targets with % allocation." />
+              {T("tp_targets")} <Tip text={T("tip_tp")} />
             </label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((n) => (
@@ -591,7 +655,7 @@ export default function CalculatorPage() {
         {showAdvanced && (
           <div className="animate-fade-in">
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Commission / Fees <Tip text="Total round-trip commission cost." />
+              {T("fee")} <Tip text="Total round-trip commission cost." />
             </label>
             <input
               type="number"
@@ -604,6 +668,40 @@ export default function CalculatorPage() {
           </div>
         )}
 
+        {/* ── Calculate button ─────────────────────────────────── */}
+        {limitReached && !isPro ? (
+          <div
+            className="rounded-xl p-4 text-center space-y-2"
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+          >
+            <p className="text-sm font-semibold" style={{ color: "var(--loss)" }}>
+              Daily limit reached. Upgrade to Pro for unlimited calculations.
+            </p>
+            <Link
+              href="/pricing"
+              className="inline-block px-6 py-2 rounded-lg text-sm font-bold transition-colors"
+              style={{ background: "var(--accent)", color: "#fff" }}
+            >
+              View Pricing
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <button
+              onClick={handleCalculate}
+              className="w-full py-3 rounded-xl text-base font-bold transition-colors"
+              style={{ background: "var(--accent)", color: "#fff" }}
+            >
+              {T("calc_btn")}
+            </button>
+            {!isPro && (
+              <p className="text-xs text-center mt-1.5" style={{ color: "var(--muted)" }}>
+                {maxCalcs - calcCount}/{maxCalcs} remaining
+              </p>
+            )}
+          </div>
+        )}
+
         {/* ── Results ──────────────────────────────────────────── */}
 
         {result && (
@@ -612,26 +710,26 @@ export default function CalculatorPage() {
             style={{ background: "var(--card)", border: "1px solid var(--border)" }}
           >
             <h2 className="text-sm font-bold" style={{ color: "var(--accent)" }}>
-              Results
+              {T("tp_analysis")}
             </h2>
 
             {/* Key stats grid */}
             <div className="grid grid-cols-2 gap-3">
-              <StatBox label="Position Size" value={`${result.qty} ${mode === "futures" ? "contracts" : "shares"}`} />
-              <StatBox label="Actual Risk" value={fmtUsd(result.actualRisk)} color="var(--loss)" />
-              <StatBox label="Total Cost" value={fmtUsd(result.totalCost)} />
-              <StatBox label="Overall R:R" value={`${fmt(result.overallRR, 2)}R`} color="var(--accent)" />
+              <StatBox label={T("position_size")} value={`${result.qty} ${mode === "futures" ? T("lot") : T("share_unit")}`} />
+              <StatBox label={T("actual_risk")} value={fmtUsd(result.actualRisk)} color="var(--loss)" />
+              <StatBox label={T("total_cost")} value={fmtUsd(result.totalCost)} />
+              <StatBox label={T("rr_ratio")} value={`${fmt(result.overallRR, 2)}R`} color="var(--accent)" />
               <StatBox
-                label="Potential Profit"
+                label={T("total_if_all_tp")}
                 value={fmtUsd(result.potentialProfit)}
                 color="var(--profit)"
               />
-              <StatBox label="SL Loss" value={fmtUsd(result.slLoss)} color="var(--loss)" />
+              <StatBox label={T("sl_loss")} value={fmtUsd(result.slLoss)} color="var(--loss)" />
               {mode === "futures" && result.marginNeeded !== undefined && (
                 <>
-                  <StatBox label="Margin Needed" value={fmtUsd(result.marginNeeded)} />
+                  <StatBox label={T("margin_needed")} value={fmtUsd(result.marginNeeded)} />
                   <StatBox
-                    label="Loss/Contract"
+                    label={T("loss_per_contract")}
                     value={fmtUsd(result.lossPerContract ?? 0)}
                     color="var(--loss)"
                   />
@@ -741,14 +839,14 @@ export default function CalculatorPage() {
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-colors"
                 style={{ background: "var(--accent)", color: "#fff" }}
               >
-                Copy
+                {T("copy_btn")}
               </button>
               <button
                 onClick={saveTrade}
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-colors"
                 style={{ background: "var(--profit)", color: "#fff" }}
               >
-                Save Trade
+                {T("save_trade")}
               </button>
             </div>
           </div>

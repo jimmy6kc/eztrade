@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useI18n } from "@/lib/i18n-context";
 
 const tabs = [
   {
-    label: "Calc",
+    labelKey: "nav_calc",
     href: "/",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
@@ -20,7 +21,7 @@ const tabs = [
     ),
   },
   {
-    label: "Strategy",
+    labelKey: "nav_tpl",
     href: "/strategies",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
@@ -32,7 +33,7 @@ const tabs = [
     ),
   },
   {
-    label: "Log",
+    labelKey: "nav_log",
     href: "/log",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
@@ -44,7 +45,7 @@ const tabs = [
     ),
   },
   {
-    label: "Stats",
+    labelKey: "nav_dash",
     href: "/dashboard",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
@@ -55,7 +56,7 @@ const tabs = [
     ),
   },
   {
-    label: "Settings",
+    labelKey: "nav_settings",
     href: "/settings",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
@@ -68,6 +69,7 @@ const tabs = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { T } = useI18n();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-stretch border-t"
@@ -87,7 +89,7 @@ export default function BottomNav() {
             style={{ color: active ? "var(--accent)" : "var(--muted)" }}
           >
             {tab.icon}
-            <span className="text-[10px] font-medium">{tab.label}</span>
+            <span className="text-[10px] font-medium">{T(tab.labelKey)}</span>
           </Link>
         );
       })}

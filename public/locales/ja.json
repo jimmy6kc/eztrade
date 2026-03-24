@@ -103,5 +103,6 @@
   "enabled": "有効",
   "daily_risk_used": "本日のリスク",
   "daily_loss": "本日の損失",
-  "max_dd": "最大DD"
+  "max_dd": "最大DD",
+  "nav_settings": "設定"
 }

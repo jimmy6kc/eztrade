@@ -103,5 +103,6 @@
   "enabled": "활성화",
   "daily_risk_used": "오늘 리스크",
   "daily_loss": "오늘 손실",
-  "max_dd": "최대 DD"
+  "max_dd": "최대 DD",
+  "nav_settings": "설정"
 }

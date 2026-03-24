@@ -103,5 +103,6 @@
   "enabled": "Aktif",
   "daily_risk_used": "Risiko Hari Ini",
   "daily_loss": "Rugi Hari Ini",
-  "max_dd": "DD Maks"
+  "max_dd": "DD Maks",
+  "nav_settings": "Setelan"
 }

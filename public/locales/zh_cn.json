@@ -103,5 +103,6 @@
   "enabled": "启用",
   "daily_risk_used": "今日风险",
   "daily_loss": "今日亏损",
-  "max_dd": "最大回撤"
+  "max_dd": "最大回撤",
+  "nav_settings": "设置"
 }

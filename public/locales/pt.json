@@ -103,5 +103,6 @@
   "enabled": "Ativado",
   "daily_risk_used": "Risco Hoje",
   "daily_loss": "Perda Hoje",
-  "max_dd": "Máx DD"
+  "max_dd": "Máx DD",
+  "nav_settings": "Config"
 }

@@ -103,5 +103,6 @@
   "enabled": "सक्रिय",
   "daily_risk_used": "आज का जोखिम",
   "daily_loss": "आज की हानि",
-  "max_dd": "अधिकतम DD"
+  "max_dd": "अधिकतम DD",
+  "nav_settings": "सेटिंग"
 }

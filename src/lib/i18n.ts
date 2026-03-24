@@ -29,7 +29,7 @@ const EN_FALLBACK: LocaleMap = {
   entry_price: 'Entry ($)', sl_price: 'SL Price ($)',
   tp_targets: 'TP Targets (optional)', calc_btn: 'Calculate',
   copy_btn: 'Copy', save_trade: 'Save Trade',
-  nav_calc: 'Calc', nav_tpl: 'Strategy', nav_log: 'Log', nav_dash: 'Stats',
+  nav_calc: 'Calc', nav_tpl: 'Strategy', nav_log: 'Log', nav_dash: 'Stats', nav_settings: 'Settings',
 };
 
 export async function loadLocale(lang: string): Promise<LocaleMap> {
