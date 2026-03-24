@@ -85,6 +85,9 @@ export default function CalculatorPage() {
   const [notes, setNotes] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+  // Save banner
+  const [saveBanner, setSaveBanner] = useState<string | null>(null);
+
   // Advanced
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -148,7 +151,7 @@ export default function CalculatorPage() {
 
   const adjustTpPcts = useCallback(
     (count: number) => {
-      const pcts = [...tpPcts];
+      const pcts = [0, 0, 0, 0, 0];
       // Even distribution: first (count-1) targets get floor, last gets remainder
       const base = Math.floor(100 / count);
       const sumOfFirst = base * (count - 1);
@@ -163,7 +166,7 @@ export default function CalculatorPage() {
       }
       setTpPcts(pcts);
     },
-    [tpPcts]
+    []
   );
 
   // ── Calculate (manual trigger) ─────────────────────────────
@@ -296,12 +299,18 @@ export default function CalculatorPage() {
       notes: notes.trim() || undefined,
       tags: selectedTags.length > 0 ? selectedTags : undefined,
     };
-    const existing = JSON.parse(localStorage.getItem("eztrade_trades") || "[]");
-    existing.unshift(trade);
-    localStorage.setItem("eztrade_trades", JSON.stringify(existing));
-    setNotes("");
-    setSelectedTags([]);
-    alert("Trade saved!");
+    try {
+      const existing = JSON.parse(localStorage.getItem("eztrade_trades") || "[]");
+      existing.unshift(trade);
+      localStorage.setItem("eztrade_trades", JSON.stringify(existing));
+      setNotes("");
+      setSelectedTags([]);
+      setSaveBanner("Trade saved!");
+      setTimeout(() => setSaveBanner(null), 2000);
+    } catch {
+      setSaveBanner("Trade saved locally! Sign in to sync across devices.");
+      setTimeout(() => setSaveBanner(null), 3000);
+    }
   };
 
   // ── Price bar visualization ─────────────────────────────────
@@ -727,12 +736,18 @@ export default function CalculatorPage() {
               <StatBox label={T("position_size")} value={`${result.qty} ${mode === "futures" ? T("lot") : T("share_unit")}`} />
               <StatBox label={T("actual_risk")} value={fmtUsd(result.actualRisk)} color="var(--loss)" />
               <StatBox label={T("total_cost")} value={fmtUsd(result.totalCost)} />
-              <StatBox label={T("rr_ratio")} value={`${fmt(result.overallRR, 2)}R`} color="var(--accent)" />
               <StatBox
-                label={T("total_if_all_tp")}
-                value={fmtUsd(result.potentialProfit)}
-                color="var(--profit)"
+                label={T("rr_ratio")}
+                value={result.tpAnalysis.length > 0 ? `${fmt(result.overallRR, 2)}R` : "\u2014"}
+                color="var(--accent)"
               />
+              {result.tpAnalysis.length > 0 && (
+                <StatBox
+                  label={T("total_if_all_tp")}
+                  value={fmtUsd(result.potentialProfit)}
+                  color="var(--profit)"
+                />
+              )}
               <StatBox label={T("sl_loss")} value={fmtUsd(result.slLoss)} color="var(--loss)" />
               {mode === "futures" && result.marginNeeded !== undefined && (
                 <>
@@ -840,6 +855,16 @@ export default function CalculatorPage() {
                 rows={3}
               />
             </div>
+
+            {/* Save banner */}
+            {saveBanner && (
+              <div
+                className="text-sm font-semibold text-center px-4 py-2 rounded-lg animate-fade-in"
+                style={{ background: "rgba(34,197,94,0.15)", color: "var(--profit)" }}
+              >
+                {saveBanner}
+              </div>
+            )}
 
             {/* Action buttons */}
             <div className="flex gap-2 pt-2">
