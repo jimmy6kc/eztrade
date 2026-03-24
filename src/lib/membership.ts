@@ -1,33 +1,34 @@
 import type { Tier } from "@/lib/auth";
 
 // ---------------------------------------------------------------------------
-// Feature matrix
+// Feature matrix — simplified: Free + Pro ($9.99/mo)
 // ---------------------------------------------------------------------------
 
 export const TIER_FEATURES = {
   free: {
-    maxTrades: 5,
+    maxTrades: 2,
+    maxCalcsPerDay: 5,
     cloudSync: false,
     templates: false,
     livePrices: false,
     tradingView: false,
-    ibkr: false,
   },
   pro: {
     maxTrades: Infinity,
-    cloudSync: true,
-    templates: true,
-    livePrices: false,
-    tradingView: false,
-    ibkr: false,
-  },
-  premium: {
-    maxTrades: Infinity,
+    maxCalcsPerDay: Infinity,
     cloudSync: true,
     templates: true,
     livePrices: true,
     tradingView: true,
-    ibkr: true,
+  },
+  // Keep premium as alias for pro (backward compatibility)
+  premium: {
+    maxTrades: Infinity,
+    maxCalcsPerDay: Infinity,
+    cloudSync: true,
+    templates: true,
+    livePrices: true,
+    tradingView: true,
   },
 } as const satisfies Record<Tier, unknown>;
 
@@ -35,32 +36,32 @@ export const TIER_FEATURES = {
 // Guards
 // ---------------------------------------------------------------------------
 
-/** Free users are limited to 5 trades. Pro and Premium are unlimited. */
+/** Free users limited to 2 saved trades. Pro unlimited. */
 export function canUseTrade(tier: Tier, tradeCount: number): boolean {
   return tradeCount < TIER_FEATURES[tier].maxTrades;
 }
 
-/** Cloud sync is available for Pro and Premium tiers. */
+/** Free users limited to 5 calculations per day. Pro unlimited. */
+export function canUseCalc(tier: Tier, calcCount: number): boolean {
+  return calcCount < TIER_FEATURES[tier].maxCalcsPerDay;
+}
+
+/** Cloud sync is Pro only. */
 export function canUseCloudSync(tier: Tier): boolean {
   return TIER_FEATURES[tier].cloudSync;
 }
 
-/** Templates are available for Pro and Premium tiers. */
+/** Templates are Pro only. */
 export function canUseTemplates(tier: Tier): boolean {
   return TIER_FEATURES[tier].templates;
 }
 
-/** Live price feeds are a Premium-only feature. */
+/** Live price feeds are Pro only. */
 export function canUseLivePrices(tier: Tier): boolean {
   return TIER_FEATURES[tier].livePrices;
 }
 
-/** TradingView integration is a Premium-only feature. */
+/** TradingView integration is Pro only. */
 export function canUseTradingView(tier: Tier): boolean {
   return TIER_FEATURES[tier].tradingView;
-}
-
-/** Interactive Brokers integration is a Premium-only feature. */
-export function canUseIBKR(tier: Tier): boolean {
-  return TIER_FEATURES[tier].ibkr;
 }

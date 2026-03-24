@@ -28,55 +28,54 @@ const PLANS: {
   {
     tier: "pro",
     name: "Pro",
-    price: "$4.99",
+    price: "$9.99",
     priceNote: "/month",
     highlight: true,
     features: [
       "Everything in Free",
       "Unlimited trades",
       "Cloud sync across devices",
+      "Live price feeds",
       "Strategy templates",
+      "Advanced analytics (equity curve, heatmap)",
+      "TradingView integration",
       "CSV export",
       "Priority support",
-    ],
-  },
-  {
-    tier: "premium",
-    name: "Premium",
-    price: "$9.99",
-    priceNote: "/month",
-    features: [
-      "Everything in Pro",
-      "Live price feeds",
-      "TradingView integration",
-      "IBKR connection",
-      "Advanced analytics",
-      "API access",
     ],
   },
 ];
 
 const CHECK_FEATURES = [
-  { label: "Position Calculator", free: true, pro: true, premium: true },
-  { label: "Saved Trades", free: "5", pro: "Unlimited", premium: "Unlimited" },
-  { label: "Cloud Sync", free: false, pro: true, premium: true },
-  { label: "Strategy Templates", free: false, pro: true, premium: true },
-  { label: "Live Prices", free: false, pro: false, premium: true },
-  { label: "TradingView", free: false, pro: false, premium: true },
-  { label: "IBKR Integration", free: false, pro: false, premium: true },
+  { label: "Position Calculator", free: true, pro: true },
+  { label: "Saved Trades", free: "5", pro: "Unlimited" },
+  { label: "Cloud Sync", free: false, pro: true },
+  { label: "Live Prices", free: false, pro: true },
+  { label: "Strategy Templates", free: false, pro: true },
+  { label: "Advanced Analytics", free: false, pro: true },
+  { label: "TradingView", free: false, pro: true },
+  { label: "CSV Export", free: false, pro: true },
 ];
 
 export default function PricingPage() {
   const { user, tier } = useAuth();
 
-  const handleSubscribe = (planTier: Tier) => {
+  const handleSubscribe = async (planTier: Tier) => {
     if (planTier === "free") return;
-    // In production, this would redirect to Stripe Checkout
-    const checkoutUrl =
-      planTier === "pro"
-        ? process.env.NEXT_PUBLIC_STRIPE_PRO_LINK || "#"
-        : process.env.NEXT_PUBLIC_STRIPE_PREMIUM_LINK || "#";
-    window.open(checkoutUrl, "_blank");
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
+    try {
+      const res = await fetch("/api/stripe/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID || "" }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      alert("Failed to start checkout. Please try again.");
+    }
   };
 
   return (
@@ -189,7 +188,6 @@ export default function PricingPage() {
                 <th className="text-left py-1">Feature</th>
                 <th className="text-center py-1">Free</th>
                 <th className="text-center py-1">Pro</th>
-                <th className="text-center py-1">Premium</th>
               </tr>
             </thead>
             <tbody>
@@ -201,9 +199,6 @@ export default function PricingPage() {
                   </td>
                   <td className="text-center py-2">
                     <CellValue val={f.pro} />
-                  </td>
-                  <td className="text-center py-2">
-                    <CellValue val={f.premium} />
                   </td>
                 </tr>
               ))}
