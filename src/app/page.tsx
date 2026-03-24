@@ -149,12 +149,14 @@ export default function CalculatorPage() {
   const adjustTpPcts = useCallback(
     (count: number) => {
       const pcts = [...tpPcts];
-      // simple even distribution
+      // Even distribution: first (count-1) targets get floor, last gets remainder
       const base = Math.floor(100 / count);
-      const remainder = 100 - base * count;
+      const sumOfFirst = base * (count - 1);
       for (let i = 0; i < 5; i++) {
-        if (i < count) {
-          pcts[i] = base + (i === 0 ? remainder : 0);
+        if (i < count - 1) {
+          pcts[i] = base;
+        } else if (i === count - 1) {
+          pcts[i] = 100 - sumOfFirst;
         } else {
           pcts[i] = 0;
         }
@@ -228,15 +230,20 @@ export default function CalculatorPage() {
 
   const setTpPct = (i: number, v: number) => {
     const next = [...tpPcts];
-    next[i] = v;
+    next[i] = Math.max(0, Math.min(100, v));
     // Auto-adjust: last active TP always gets the remainder to total 100%
     const lastIdx = tpCount - 1;
-    if (i !== lastIdx && tpCount > 1) {
-      let used = 0;
+    if (tpCount > 1) {
+      let sumExceptLast = 0;
       for (let j = 0; j < lastIdx; j++) {
-        used += j === i ? v : next[j];
+        sumExceptLast += next[j];
       }
-      next[lastIdx] = Math.max(0, 100 - used);
+      // Cap the sum at 100; last target gets whatever is left (min 0)
+      if (sumExceptLast > 100) {
+        next[lastIdx] = 0;
+      } else {
+        next[lastIdx] = 100 - sumExceptLast;
+      }
     }
     setTpPcts(next);
   };
@@ -623,6 +630,9 @@ export default function CalculatorPage() {
                     className="w-14 text-center"
                     min={0}
                     max={100}
+                    disabled={tpCount > 1 && i === tpCount - 1}
+                    style={tpCount > 1 && i === tpCount - 1 ? { opacity: 0.6, fontStyle: "italic" } : undefined}
+                    title={tpCount > 1 && i === tpCount - 1 ? "Auto-calculated to reach 100%" : undefined}
                   />
                   <span className="text-xs" style={{ color: "var(--muted)" }}>%</span>
                 </div>
