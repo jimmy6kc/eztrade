@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useI18n } from "@/lib/i18n-context";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -58,6 +59,7 @@ const STORAGE_KEY = "eztrade_strategies";
 // ── Component ─────────────────────────────────────────────────
 
 export default function StrategiesPage() {
+  const { T } = useI18n();
   const router = useRouter();
   const [strategies, setStrategies] = useState<Strategy[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -133,14 +135,14 @@ export default function StrategiesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-bold" style={{ color: "var(--accent)" }}>
-            Strategies
+            {T("templates")}
           </h1>
           <button
             onClick={() => setShowForm(!showForm)}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg"
             style={{ background: "var(--accent)", color: "#fff" }}
           >
-            {showForm ? "Cancel" : "+ New"}
+            {showForm ? T("cancel") : T("save_as_template")}
           </button>
         </div>
 
@@ -154,7 +156,7 @@ export default function StrategiesPage() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Strategy name"
+              placeholder={T("tpl_name")}
               className="w-full"
             />
             <div className="flex gap-2">
@@ -169,13 +171,13 @@ export default function StrategiesPage() {
                     border: `1px solid ${direction === d ? "transparent" : "var(--border)"}`,
                   }}
                 >
-                  {d.toUpperCase()}
+                  {d === "long" ? T("long") : T("short")}
                 </button>
               ))}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs" style={{ color: "var(--muted)" }}>Risk $</label>
+                <label className="text-xs" style={{ color: "var(--muted)" }}>{T("risk_amount")}</label>
                 <input
                   type="number"
                   value={risk}
@@ -184,7 +186,7 @@ export default function StrategiesPage() {
                 />
               </div>
               <div>
-                <label className="text-xs" style={{ color: "var(--muted)" }}>SL %</label>
+                <label className="text-xs" style={{ color: "var(--muted)" }}>{T("sl_pct")}</label>
                 <input
                   type="number"
                   value={slPct}
@@ -195,7 +197,7 @@ export default function StrategiesPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs" style={{ color: "var(--muted)" }}>TP Targets (% from entry)</label>
+              <label className="text-xs" style={{ color: "var(--muted)" }}>{T("tp_targets")}</label>
               {tpInputs.map((tp, i) => (
                 <div key={i} className="flex gap-2 items-center">
                   <span className="text-xs font-bold w-6" style={{ color: "var(--profit)" }}>
@@ -234,7 +236,7 @@ export default function StrategiesPage() {
                     className="text-xs"
                     style={{ color: "var(--accent)" }}
                   >
-                    + Add TP
+                    {T("add_tp")}
                   </button>
                 )}
                 {tpInputs.length > 1 && (
@@ -243,7 +245,7 @@ export default function StrategiesPage() {
                     className="text-xs"
                     style={{ color: "var(--loss)" }}
                   >
-                    - Remove
+                    {T("remove_tp")}
                   </button>
                 )}
               </div>
@@ -253,7 +255,7 @@ export default function StrategiesPage() {
               className="w-full py-2.5 rounded-lg text-sm font-semibold"
               style={{ background: "var(--accent)", color: "#fff" }}
             >
-              Save Strategy
+              {T("create_tpl")}
             </button>
           </div>
         )}
@@ -261,7 +263,7 @@ export default function StrategiesPage() {
         {/* Strategy list */}
         {strategies.length === 0 && !showForm && (
           <div className="text-center py-12" style={{ color: "var(--muted)" }}>
-            <p className="text-sm">No strategies</p>
+            <p className="text-sm">{T("no_templates")}</p>
           </div>
         )}
 
@@ -283,7 +285,7 @@ export default function StrategiesPage() {
                       color: s.direction === "long" ? "var(--profit)" : "var(--loss)",
                     }}
                   >
-                    {s.direction.toUpperCase()}
+                    {s.direction === "long" ? T("long") : T("short")}
                   </span>
                 </div>
                 <span className="text-xs" style={{ color: "var(--muted)" }}>
@@ -307,14 +309,14 @@ export default function StrategiesPage() {
                   className="px-4 py-1.5 rounded-lg text-xs font-semibold"
                   style={{ background: "var(--accent)", color: "#fff" }}
                 >
-                  Use
+                  {T("use_template")}
                 </button>
                 <button
                   onClick={() => deleteStrategy(s.id)}
                   className="px-4 py-1.5 rounded-lg text-xs font-semibold"
                   style={{ background: "rgba(244,67,54,0.15)", color: "var(--loss)" }}
                 >
-                  Delete
+                  {T("delete")}
                 </button>
               </div>
             </div>

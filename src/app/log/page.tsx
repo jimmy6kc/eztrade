@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useI18n } from "@/lib/i18n-context";
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -47,6 +48,7 @@ const TAG_COLORS: Record<string, string> = {
 // ── Component ─────────────────────────────────────────────────
 
 export default function LogPage() {
+  const { T } = useI18n();
   const [trades, setTrades] = useState<LocalTrade[]>([]);
   const [filter, setFilter] = useState<Filter>("all");
   const [tagFilter, setTagFilter] = useState<string | null>(null);
@@ -285,7 +287,7 @@ export default function LogPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-bold" style={{ color: "var(--accent)" }}>
-            Trade Log
+            {T("trade_log")}
           </h1>
           <span className="text-xs" style={{ color: "var(--muted)" }}>
             {trades.length} trades
@@ -298,14 +300,14 @@ export default function LogPage() {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className="px-4 py-1.5 rounded-full text-xs font-semibold transition-colors capitalize"
+              className="px-4 py-1.5 rounded-full text-xs font-semibold transition-colors"
               style={{
                 background: filter === f ? "var(--accent)" : "var(--card)",
                 color: filter === f ? "#fff" : "var(--text)",
                 border: `1px solid ${filter === f ? "var(--accent)" : "var(--border)"}`,
               }}
             >
-              {f}
+              {f === "all" ? T("filter_all") : f === "open" ? T("filter_open") : T("filter_closed")}
             </button>
           ))}
           {/* Tag filter divider */}
@@ -336,8 +338,8 @@ export default function LogPage() {
         {/* Trade cards */}
         {filtered.length === 0 && (
           <div className="text-center py-12" style={{ color: "var(--muted)" }}>
-            <p className="text-sm">No trades yet</p>
-            <p className="text-xs mt-1">Calculate and save a trade to see it here.</p>
+            <p className="text-sm">{T("no_trades")}</p>
+            <p className="text-xs mt-1">{T("no_trades_hint")}</p>
           </div>
         )}
 
@@ -354,7 +356,7 @@ export default function LogPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm">{t.symbol}</span>
+                    <span className="font-bold text-sm">{t.symbol || "\u2014"}</span>
                     <span
                       className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                       style={{
@@ -362,11 +364,11 @@ export default function LogPage() {
                         color: t.direction === "long" ? "var(--profit)" : "var(--loss)",
                       }}
                     >
-                      {t.direction.toUpperCase()}
+                      {t.direction === "long" ? T("long") : T("short")}
                     </span>
                   </div>
                   <span className={`badge badge-${status}`}>
-                    {status.toUpperCase()}
+                    {status === "open" ? T("status_open") : status === "win" ? T("status_win") : status === "loss" ? T("status_loss") : status === "be" ? T("status_be") : T("filter_closed")}
                   </span>
                 </div>
 
@@ -390,32 +392,32 @@ export default function LogPage() {
 
                 <div className="grid grid-cols-3 gap-2 mt-2 text-xs">
                   <div>
-                    <span style={{ color: "var(--muted)" }}>Date</span>
+                    <span style={{ color: "var(--muted)" }}>{T("date")}</span>
                     <div className="font-medium">{t.entryDate}</div>
                   </div>
                   <div>
-                    <span style={{ color: "var(--muted)" }}>Qty</span>
+                    <span style={{ color: "var(--muted)" }}>{T("qty")}</span>
                     <div className="font-medium">{t.quantity}</div>
                   </div>
                   <div>
-                    <span style={{ color: "var(--muted)" }}>Entry</span>
+                    <span style={{ color: "var(--muted)" }}>{T("entry_price")}</span>
                     <div className="font-medium">{fmt(t.entryPrice)}</div>
                   </div>
                   {t.slPrice && (
                     <div>
-                      <span style={{ color: "var(--muted)" }}>SL</span>
+                      <span style={{ color: "var(--muted)" }}>{T("sl_price")}</span>
                       <div className="font-medium">{fmt(t.slPrice)}</div>
                     </div>
                   )}
                   {t.risk && (
                     <div>
-                      <span style={{ color: "var(--muted)" }}>Risk</span>
+                      <span style={{ color: "var(--muted)" }}>{T("risk_amount")}</span>
                       <div className="font-medium">{fmtUsd(t.risk)}</div>
                     </div>
                   )}
                   {t.rr && (
                     <div>
-                      <span style={{ color: "var(--muted)" }}>R:R</span>
+                      <span style={{ color: "var(--muted)" }}>{T("rr_ratio")}</span>
                       <div className="font-medium">{fmt(t.rr, 1)}</div>
                     </div>
                   )}
@@ -458,7 +460,7 @@ export default function LogPage() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      Notes
+                      {T("notes")}
                     </button>
                     {isNotesExpanded && (
                       <div
@@ -486,7 +488,7 @@ export default function LogPage() {
                       className="text-xs font-semibold px-3 py-1.5 rounded-lg"
                       style={{ background: "var(--accent)", color: "#fff" }}
                     >
-                      Close
+                      {T("close_trade")}
                     </button>
                   )}
                   <button
@@ -494,14 +496,14 @@ export default function LogPage() {
                     className="text-xs font-semibold px-3 py-1.5 rounded-lg"
                     style={{ background: "rgba(74,144,217,0.15)", color: "var(--accent)" }}
                   >
-                    Edit
+                    {T("edit")}
                   </button>
                   <button
                     onClick={() => deleteTrade(t.id)}
                     className="text-xs font-semibold px-3 py-1.5 rounded-lg"
                     style={{ background: "rgba(244,67,54,0.15)", color: "var(--loss)" }}
                   >
-                    Delete
+                    {T("delete")}
                   </button>
                 </div>
               </div>
@@ -516,21 +518,21 @@ export default function LogPage() {
             className="px-4 py-2 rounded-lg text-xs font-semibold"
             style={{ background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)" }}
           >
-            Export CSV
+            {T("export_csv")}
           </button>
           <button
             onClick={backup}
             className="px-4 py-2 rounded-lg text-xs font-semibold"
             style={{ background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)" }}
           >
-            Backup
+            {T("backup_now")}
           </button>
           <button
             onClick={importData}
             className="px-4 py-2 rounded-lg text-xs font-semibold"
             style={{ background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)" }}
           >
-            Import
+            {T("import_data")}
           </button>
         </div>
       </div>
@@ -548,11 +550,11 @@ export default function LogPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-sm font-bold" style={{ color: "var(--accent)" }}>
-              Close Trade
+              {T("close_trade")}
             </h3>
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Exit Price
+                {T("exit_price")}
               </label>
               <input
                 type="number"
@@ -570,14 +572,14 @@ export default function LogPage() {
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: "var(--accent)", color: "#fff" }}
               >
-                Confirm
+                {T("confirm")}
               </button>
               <button
                 onClick={() => setCloseModal(null)}
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: "var(--border)", color: "var(--text)" }}
               >
-                Cancel
+                {T("cancel")}
               </button>
             </div>
           </div>
@@ -597,13 +599,13 @@ export default function LogPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-sm font-bold" style={{ color: "var(--accent)" }}>
-              Edit Trade
+              {T("edit_trade")}
             </h3>
 
             {/* Symbol */}
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Ticker
+                {T("ticker")}
               </label>
               <input
                 type="text"
@@ -617,7 +619,7 @@ export default function LogPage() {
             {/* Direction */}
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Direction
+                {T("direction")}
               </label>
               <div className="flex gap-2 mt-1">
                 {(["long", "short"] as const).map((d) => (
@@ -631,7 +633,7 @@ export default function LogPage() {
                       border: `1px solid ${editDirection === d ? (d === "long" ? "var(--profit)" : "var(--loss)") : "var(--border)"}`,
                     }}
                   >
-                    {d === "long" ? "Long" : "Short"}
+                    {d === "long" ? T("long") : T("short")}
                   </button>
                 ))}
               </div>
@@ -641,7 +643,7 @@ export default function LogPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  Entry Price
+                  {T("entry_price")}
                 </label>
                 <input
                   type="number"
@@ -654,7 +656,7 @@ export default function LogPage() {
               </div>
               <div>
                 <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  Stop Loss
+                  {T("sl_price")}
                 </label>
                 <input
                   type="number"
@@ -667,7 +669,7 @@ export default function LogPage() {
               </div>
               <div>
                 <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  Exit Price
+                  {T("exit_price")}
                 </label>
                 <input
                   type="number"
@@ -680,7 +682,7 @@ export default function LogPage() {
               </div>
               <div>
                 <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  Quantity
+                  {T("qty")}
                 </label>
                 <input
                   type="number"
@@ -696,21 +698,21 @@ export default function LogPage() {
             {/* Status */}
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Status
+                {T("status")}
               </label>
               <div className="flex gap-2 mt-1">
                 {(["open", "closed"] as const).map((s) => (
                   <button
                     key={s}
                     onClick={() => setEditStatus(s)}
-                    className="flex-1 py-2 rounded-lg text-sm font-semibold transition-colors capitalize"
+                    className="flex-1 py-2 rounded-lg text-sm font-semibold transition-colors"
                     style={{
                       background: editStatus === s ? "var(--accent)" : "var(--input-bg)",
                       color: editStatus === s ? "#fff" : "var(--text)",
                       border: `1px solid ${editStatus === s ? "var(--accent)" : "var(--border)"}`,
                     }}
                   >
-                    {s}
+                    {s === "open" ? T("filter_open") : T("filter_closed")}
                   </button>
                 ))}
               </div>
@@ -719,7 +721,7 @@ export default function LogPage() {
             {/* Tags */}
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Tags
+                {T("tags")}
               </label>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {PREDEFINED_TAGS.map((tag) => {
@@ -745,7 +747,7 @@ export default function LogPage() {
             {/* Notes */}
             <div>
               <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                Notes
+                {T("notes")}
               </label>
               <textarea
                 value={editNotes}
@@ -769,14 +771,14 @@ export default function LogPage() {
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: "var(--accent)", color: "#fff" }}
               >
-                Save Changes
+                {T("save_changes")}
               </button>
               <button
                 onClick={() => setEditModal(null)}
                 className="flex-1 py-2.5 rounded-lg text-sm font-semibold"
                 style={{ background: "var(--border)", color: "var(--text)" }}
               >
-                Cancel
+                {T("cancel")}
               </button>
             </div>
           </div>

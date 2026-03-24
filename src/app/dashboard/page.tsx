@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { useI18n } from "@/lib/i18n-context";
 
 interface LocalTrade {
   id: string;
@@ -23,6 +24,7 @@ const fmt = (n: number, d = 2) =>
 const fmtUsd = (n: number) => (n >= 0 ? "+$" : "-$") + fmt(Math.abs(n));
 
 export default function DashboardPage() {
+  const { T } = useI18n();
   const [trades, setTrades] = useState<LocalTrade[]>([]);
 
   useEffect(() => {
@@ -97,30 +99,30 @@ export default function DashboardPage() {
     <div className="flex-1 pb-nav">
       <div className="max-w-lg mx-auto px-4 py-4 space-y-4">
         <h1 className="text-lg font-bold" style={{ color: "var(--accent)" }}>
-          Dashboard
+          {T("nav_dash")}
         </h1>
 
         {trades.length === 0 ? (
           <div className="text-center py-12" style={{ color: "var(--muted)" }}>
-            <p className="text-sm">No stats yet</p>
-            <p className="text-xs mt-1">Close some trades to see your performance.</p>
+            <p className="text-sm">{T("no_trades")}</p>
+            <p className="text-xs mt-1">{T("no_trades_hint")}</p>
           </div>
         ) : (
           <>
             {/* Top stats */}
             <div className="grid grid-cols-2 gap-3">
-              <Card label="Total Trades" value={String(stats.total)} />
+              <Card label={T("total_trades")} value={String(stats.total)} />
               <Card
-                label="Win Rate"
+                label={T("win_rate")}
                 value={`${fmt(stats.winRate, 1)}%`}
                 color={stats.winRate >= 50 ? "var(--profit)" : "var(--loss)"}
               />
               <Card
-                label="Total P&L"
+                label={T("total_pnl")}
                 value={fmtUsd(stats.totalPnl)}
                 color={stats.totalPnl >= 0 ? "var(--profit)" : "var(--loss)"}
               />
-              <Card label="Avg R:R" value={`${fmt(stats.avgRR, 1)}R`} color="var(--accent)" />
+              <Card label={T("avg_rr")} value={`${fmt(stats.avgRR, 1)}R`} color="var(--accent)" />
             </div>
 
             {/* Wins / Losses / BE */}
@@ -129,13 +131,13 @@ export default function DashboardPage() {
               style={{ background: "var(--card)", border: "1px solid var(--border)" }}
             >
               <div className="text-xs font-medium mb-3" style={{ color: "var(--muted)" }}>
-                Trade Outcomes
+                {T("trade_outcomes")}
               </div>
               <div className="flex gap-4">
-                <OutcomeBox label="Wins" count={stats.wins} color="var(--profit)" />
-                <OutcomeBox label="Losses" count={stats.losses} color="var(--loss)" />
-                <OutcomeBox label="B/E" count={stats.breakevens} color="var(--warn)" />
-                <OutcomeBox label="Open" count={stats.open} color="var(--accent)" />
+                <OutcomeBox label={T("wins")} count={stats.wins} color="var(--profit)" />
+                <OutcomeBox label={T("losses")} count={stats.losses} color="var(--loss)" />
+                <OutcomeBox label={T("breakeven")} count={stats.breakevens} color="var(--warn)" />
+                <OutcomeBox label={T("status_open")} count={stats.open} color="var(--accent)" />
               </div>
               {stats.closedCount > 0 && (
                 <div className="mt-3 h-3 rounded-full overflow-hidden flex" style={{ background: "var(--input-bg)" }}>
@@ -171,7 +173,7 @@ export default function DashboardPage() {
                 style={{ background: "var(--card)", border: "1px solid var(--border)" }}
               >
                 <span className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  Recent Streak
+                  {T("streak")}
                 </span>
                 <span
                   className="text-lg font-bold"
@@ -187,22 +189,22 @@ export default function DashboardPage() {
             {/* Detailed stats */}
             <div className="grid grid-cols-2 gap-3">
               <Card
-                label="Best Win"
+                label={T("best_win")}
                 value={stats.bestWin > 0 ? fmtUsd(stats.bestWin) : "--"}
                 color="var(--profit)"
               />
               <Card
-                label="Worst Loss"
+                label={T("worst_loss")}
                 value={stats.worstLoss < 0 ? fmtUsd(stats.worstLoss) : "--"}
                 color="var(--loss)"
               />
               <Card
-                label="Avg Win"
+                label={T("avg_win")}
                 value={stats.avgWin > 0 ? fmtUsd(stats.avgWin) : "--"}
                 color="var(--profit)"
               />
               <Card
-                label="Avg Loss"
+                label={T("avg_loss")}
                 value={stats.avgLoss < 0 ? fmtUsd(stats.avgLoss) : "--"}
                 color="var(--loss)"
               />
@@ -229,6 +231,7 @@ export default function DashboardPage() {
 // ── Equity Curve ─────────────────────────────────────────────────────────────
 
 function EquityCurve({ trades }: { trades: LocalTrade[] }) {
+  const { T } = useI18n();
   const data = useMemo(() => {
     if (trades.length === 0) return null;
 
@@ -298,7 +301,7 @@ function EquityCurve({ trades }: { trades: LocalTrade[] }) {
       style={{ background: "var(--card)", border: "1px solid var(--border)" }}
     >
       <div className="text-xs font-medium mb-2" style={{ color: "var(--muted)" }}>
-        Equity Curve
+        {T("equity_curve")}
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: "visible" }}>
         {/* Zero line */}
@@ -354,6 +357,7 @@ function EquityCurve({ trades }: { trades: LocalTrade[] }) {
 // ── Calendar Heatmap ─────────────────────────────────────────────────────────
 
 function CalendarHeatmap({ trades }: { trades: LocalTrade[] }) {
+  const { T } = useI18n();
   const { days, months } = useMemo(() => {
     // Build a map: date string -> daily P&L
     const dailyPnl = new Map<string, number>();
@@ -402,7 +406,7 @@ function CalendarHeatmap({ trades }: { trades: LocalTrade[] }) {
       style={{ background: "var(--card)", border: "1px solid var(--border)" }}
     >
       <div className="text-xs font-medium mb-2" style={{ color: "var(--muted)" }}>
-        90-Day Calendar
+        {T("calendar_90")}
       </div>
       <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full">
         {/* Month labels */}
@@ -450,9 +454,9 @@ function CalendarHeatmap({ trades }: { trades: LocalTrade[] }) {
         })}
       </svg>
       <div className="flex gap-3 mt-1 justify-end">
-        <Legend color="var(--profit)" label="Profit" />
-        <Legend color="var(--loss)" label="Loss" />
-        <Legend color="var(--input-bg)" label="None" />
+        <Legend color="var(--profit)" label={T("profit_label")} />
+        <Legend color="var(--loss)" label={T("loss_label")} />
+        <Legend color="var(--input-bg)" label={T("none_label")} />
       </div>
     </div>
   );
@@ -470,6 +474,7 @@ function Legend({ color, label }: { color: string; label: string }) {
 // ── Performance by Tag ───────────────────────────────────────────────────────
 
 function PerformanceByTag({ trades }: { trades: LocalTrade[] }) {
+  const { T } = useI18n();
   const tagStats = useMemo(() => {
     const map = new Map<string, { wins: number; total: number; totalPnl: number }>();
 
@@ -504,7 +509,7 @@ function PerformanceByTag({ trades }: { trades: LocalTrade[] }) {
       style={{ background: "var(--card)", border: "1px solid var(--border)" }}
     >
       <div className="text-xs font-medium mb-2" style={{ color: "var(--muted)" }}>
-        Performance by Tag
+        {T("perf_by_tag")}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
@@ -545,6 +550,7 @@ function PerformanceByTag({ trades }: { trades: LocalTrade[] }) {
 // ── R-Multiple Distribution ──────────────────────────────────────────────────
 
 function RMultipleDistribution({ trades }: { trades: LocalTrade[] }) {
+  const { T } = useI18n();
   const buckets = useMemo(() => {
     const ranges = [
       { label: "< 0R", min: -Infinity, max: 0, count: 0, color: "var(--loss)" },
@@ -580,7 +586,7 @@ function RMultipleDistribution({ trades }: { trades: LocalTrade[] }) {
       style={{ background: "var(--card)", border: "1px solid var(--border)" }}
     >
       <div className="text-xs font-medium mb-3" style={{ color: "var(--muted)" }}>
-        R-Multiple Distribution
+        {T("r_distribution")}
       </div>
       <div className="space-y-2">
         {buckets.map((b) => (
