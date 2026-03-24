@@ -292,16 +292,6 @@ export default function CalculatorPage() {
   return (
     <div className="flex-1 pb-nav">
       <div className="max-w-lg mx-auto px-4 py-4 space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold" style={{ color: "var(--accent)" }}>
-            EZtrade
-          </h1>
-          <a href="/settings" className="text-sm" style={{ color: "var(--muted)" }}>
-            Settings
-          </a>
-        </div>
-
         {/* Mode toggle */}
         <div className="flex gap-2">
           {(["stock", "futures"] as const).map((m) => (

@@ -183,38 +183,6 @@ export default function SettingsPage() {
           )}
         </Section>
 
-        {/* Appearance */}
-        <Section title="Appearance">
-          <div className="flex items-center justify-between">
-            <span className="text-sm">Theme</span>
-            <button
-              onClick={toggleTheme}
-              className={`toggle-switch ${settings.theme === "light" ? "active" : ""}`}
-              aria-label="Toggle theme"
-            />
-          </div>
-          <div className="flex items-center justify-between text-sm mt-1">
-            <span style={{ color: "var(--muted)" }}>
-              {settings.theme === "dark" ? "Dark" : "Light"}
-            </span>
-          </div>
-        </Section>
-
-        {/* Language */}
-        <Section title="Language">
-          <select
-            value={settings.lang}
-            onChange={(e) => changeLang(e.target.value as LangCode)}
-            className="w-full"
-          >
-            {SUPPORTED_LANGUAGES.map((l) => (
-              <option key={l.code} value={l.code}>
-                {l.name}
-              </option>
-            ))}
-          </select>
-        </Section>
-
         {/* Risk Management */}
         <Section title="Risk Management">
           <div>

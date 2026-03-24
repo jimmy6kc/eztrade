@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/lib/auth";
+import ClientShell from "@/components/ClientShell";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -49,7 +50,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <ClientShell>{children}</ClientShell>
+        </AuthProvider>
       </body>
     </html>
   );
