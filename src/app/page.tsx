@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 /* ------------------------------------------------------------------ */
@@ -97,7 +98,7 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { num: "1", title: "Sign Up Free", desc: "Create your account in seconds. No credit card required. Get a full 7-day free trial of all Pro features." },
+  { num: "1", title: "Sign Up Free", desc: "Create your account in seconds. No credit card required. Get a full 3-day free trial of all Pro features." },
   { num: "2", title: "Calculate Your Position", desc: "Enter your risk amount, entry price, and stop loss. EZtrade tells you exactly how many shares or contracts to buy." },
   { num: "3", title: "Track & Improve", desc: "Log every trade, review your stats, and refine your edge. Watch your win rate climb over time." },
 ];
@@ -109,7 +110,7 @@ const TESTIMONIALS = [
 ];
 
 const FREE_FEATURES = [
-  "7-day free trial with full Pro access",
+  "3-day free trial with full Pro access",
   "Position size calculator",
   "Up to 5 saved trades",
   "Basic stats dashboard",
@@ -131,6 +132,8 @@ const PRO_FEATURES = [
 /* ------------------------------------------------------------------ */
 
 export default function LandingPage() {
+  const [yearly, setYearly] = useState(false);
+
   return (
     <div className="landing-root">
       {/* ── HERO ─────────────────────────────────────────────────── */}
@@ -230,8 +233,58 @@ export default function LandingPage() {
             Simple, transparent pricing
           </h2>
           <p className="landing-section-sub">
-            Start with a 7-day free trial. Upgrade when you&#39;re ready.
+            Start with a 3-day free trial. Upgrade when you&#39;re ready.
           </p>
+
+          {/* Billing toggle */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 24 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--muted)" : "var(--text)" }}>
+              Monthly
+            </span>
+            <button
+              onClick={() => setYearly((v) => !v)}
+              style={{
+                position: "relative",
+                display: "inline-flex",
+                alignItems: "center",
+                height: 24,
+                width: 44,
+                borderRadius: 9999,
+                background: yearly ? "var(--accent)" : "var(--border)",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+              aria-label="Toggle yearly billing"
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  height: 16,
+                  width: 16,
+                  borderRadius: 9999,
+                  background: "#fff",
+                  transform: yearly ? "translateX(24px)" : "translateX(4px)",
+                  transition: "transform 0.2s",
+                }}
+              />
+            </button>
+            <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--text)" : "var(--muted)" }}>
+              Yearly
+            </span>
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                padding: "2px 8px",
+                borderRadius: 9999,
+                background: "rgba(76,175,80,0.15)",
+                color: "var(--profit)",
+              }}
+            >
+              Save 21%
+            </span>
+          </div>
 
           <div className="landing-pricing-grid">
             {/* Free Trial */}
@@ -240,7 +293,7 @@ export default function LandingPage() {
                 <h3 className="landing-price-name">Free Trial</h3>
                 <div className="landing-price-amount">
                   <span className="landing-price-dollar" style={{ color: "var(--text)" }}>$0</span>
-                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>for 7 days</span>
+                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>for 3 days</span>
                 </div>
               </div>
               <ul className="landing-price-features">
@@ -268,9 +321,18 @@ export default function LandingPage() {
               <div className="landing-price-header">
                 <h3 className="landing-price-name">Pro</h3>
                 <div className="landing-price-amount">
-                  <span className="landing-price-dollar" style={{ color: "var(--accent)" }}>$9.99</span>
-                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>/month</span>
+                  <span className="landing-price-dollar" style={{ color: "var(--accent)" }}>
+                    {yearly ? "$94.95" : "$9.99"}
+                  </span>
+                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>
+                    {yearly ? "/year" : "/month"}
+                  </span>
                 </div>
+                {yearly && (
+                  <p style={{ fontSize: 11, marginTop: 2, color: "var(--profit)" }}>
+                    $7.91/mo &mdash; Save 21%
+                  </p>
+                )}
               </div>
               <ul className="landing-price-features">
                 {PRO_FEATURES.map((f) => (
