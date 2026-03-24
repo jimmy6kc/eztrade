@@ -166,6 +166,15 @@ export default function CalculatorPage() {
   const setTpPct = (i: number, v: number) => {
     const next = [...tpPcts];
     next[i] = v;
+    // Auto-adjust: last active TP always gets the remainder to total 100%
+    const lastIdx = tpCount - 1;
+    if (i !== lastIdx && tpCount > 1) {
+      let used = 0;
+      for (let j = 0; j < lastIdx; j++) {
+        used += j === i ? v : next[j];
+      }
+      next[lastIdx] = Math.max(0, 100 - used);
+    }
     setTpPcts(next);
   };
 
@@ -456,7 +465,7 @@ export default function CalculatorPage() {
         {/* Risk presets */}
         <div>
           <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-            Risk Amount <Tip text="Maximum dollar amount you are willing to lose on this trade." />
+            Risk Amount <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Maximum dollar amount you are willing to lose on this trade." />
           </label>
           <div className="flex flex-wrap gap-1.5 mt-1">
             {RISK_PRESETS.map((r) => (
@@ -487,7 +496,7 @@ export default function CalculatorPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Entry Price <Tip text="Your planned entry price." />
+              Entry Price <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Your planned entry price." />
             </label>
             <input
               type="number"
@@ -500,7 +509,7 @@ export default function CalculatorPage() {
           </div>
           <div>
             <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>
-              Stop Loss <Tip text="Your stop loss price. Position size is calculated from this." />
+              Stop Loss <span style={{ color: "var(--loss)" }}>*</span> <Tip text="Your stop loss price. Position size is calculated from this." />
             </label>
             <input
               type="number"
