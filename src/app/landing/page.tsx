@@ -373,14 +373,14 @@ export default function LandingPage() {
           <div className="landing-footer-links">
             <div className="landing-footer-col">
               <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Product</h4>
-              <Link href="/" style={{ color: "var(--muted)", fontSize: 12 }}>Calculator</Link>
+              <Link href="/app" style={{ color: "var(--muted)", fontSize: 12 }}>Calculator</Link>
               <Link href="/pricing" style={{ color: "var(--muted)", fontSize: 12 }}>Pricing</Link>
-              <Link href="/log" style={{ color: "var(--muted)", fontSize: 12 }}>Trade Log</Link>
+              <Link href="/app/log" style={{ color: "var(--muted)", fontSize: 12 }}>Trade Log</Link>
             </div>
             <div className="landing-footer-col">
               <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Account</h4>
               <Link href="/login" style={{ color: "var(--muted)", fontSize: 12 }}>Sign In</Link>
-              <Link href="/settings" style={{ color: "var(--muted)", fontSize: 12 }}>Settings</Link>
+              <Link href="/app/settings" style={{ color: "var(--muted)", fontSize: 12 }}>Settings</Link>
             </div>
           </div>
           <div className="landing-footer-bottom" style={{ color: "var(--muted)" }}>

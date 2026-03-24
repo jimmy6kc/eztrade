@@ -31,6 +31,8 @@ interface AuthContextValue {
   user: User | null;
   loading: boolean;
   tier: Tier;
+  trialDaysLeft: number | null; // null = not on trial, 0+ = days remaining
+  trialExpired: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -58,23 +60,36 @@ appleProvider.addScope("name");
 // Helper — ensure a user document exists in Firestore
 // ---------------------------------------------------------------------------
 
-async function ensureUserDoc(user: User): Promise<Tier> {
+interface UserDocResult {
+  tier: Tier;
+  trialStart: Date | null;
+  trialDays: number;
+}
+
+async function ensureUserDoc(user: User): Promise<UserDocResult> {
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
 
   if (snap.exists()) {
-    return (snap.data().tier as Tier) ?? "free";
+    const data = snap.data();
+    return {
+      tier: (data.tier as Tier) ?? "free",
+      trialStart: data.trialStart?.toDate?.() ?? null,
+      trialDays: data.trialDays ?? 7,
+    };
   }
 
-  // First-time user — create their document with the free tier.
+  // First-time user — create their document with a free trial.
   await setDoc(ref, {
     email: user.email,
     displayName: user.displayName ?? null,
     tier: "free" as Tier,
+    trialStart: serverTimestamp(),
+    trialDays: 7,
     createdAt: serverTimestamp(),
   });
 
-  return "free";
+  return { tier: "free", trialStart: new Date(), trialDays: 7 };
 }
 
 // ---------------------------------------------------------------------------
@@ -84,6 +99,8 @@ async function ensureUserDoc(user: User): Promise<Tier> {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [tier, setTier] = useState<Tier>("free");
+  const [trialDaysLeft, setTrialDaysLeft] = useState<number | null>(null);
+  const [trialExpired, setTrialExpired] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Listen to Firebase auth state.
@@ -91,11 +108,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
-        const userTier = await ensureUserDoc(firebaseUser);
-        setTier(userTier);
+        const result = await ensureUserDoc(firebaseUser);
+        setTier(result.tier);
+
+        // Compute trial state
+        if (result.tier === "free" && result.trialStart) {
+          const now = Date.now();
+          const trialEnd = result.trialStart.getTime() + result.trialDays * 24 * 60 * 60 * 1000;
+          const msLeft = trialEnd - now;
+          if (msLeft <= 0) {
+            setTrialDaysLeft(0);
+            setTrialExpired(true);
+          } else {
+            setTrialDaysLeft(Math.ceil(msLeft / (24 * 60 * 60 * 1000)));
+            setTrialExpired(false);
+          }
+        } else {
+          setTrialDaysLeft(null);
+          setTrialExpired(false);
+        }
       } else {
         setUser(null);
         setTier("free");
+        setTrialDaysLeft(null);
+        setTrialExpired(false);
       }
       setLoading(false);
     });
@@ -136,6 +172,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     loading,
     tier,
+    trialDaysLeft,
+    trialExpired,
     login,
     logout,
     signInWithGoogle: signInWithGoogleFn,

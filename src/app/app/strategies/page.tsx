@@ -126,7 +126,7 @@ export default function StrategiesPage() {
         tps: s.tps,
       })
     );
-    router.push("/");
+    router.push("/app");
   };
 
   return (

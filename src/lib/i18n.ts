@@ -17,7 +17,7 @@ export type LangCode = (typeof SUPPORTED_LANGUAGES)[number]['code'];
 
 type LocaleMap = Record<string, string>;
 
-let currentLang: LangCode = 'zh';
+let currentLang: LangCode = 'en';
 let currentLocale: LocaleMap = {};
 let fallbackLocale: LocaleMap = {};
 
@@ -67,7 +67,7 @@ export async function initI18n(lang?: LangCode): Promise<void> {
     ? localStorage.getItem('eztrade_lang')
     : null) as LangCode | null;
 
-  const target = lang ?? saved ?? 'zh';
+  const target = lang ?? saved ?? 'en';
 
   fallbackLocale = await loadLocale('en');
   await setLanguage(target);

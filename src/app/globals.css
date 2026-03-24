@@ -760,6 +760,80 @@ input::placeholder {
   margin-top: 8px;
 }
 
+/* Steps grid */
+.landing-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.landing-step-card {
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.landing-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.landing-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+/* Testimonials grid */
+.landing-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.landing-testimonial-card {
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.landing-testimonial-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.landing-testimonial-quote {
+  font-size: 13px;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.landing-testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landing-testimonial-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.landing-testimonial-role {
+  font-size: 11px;
+}
+
 /* ── Responsive ─────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -811,6 +885,20 @@ input::placeholder {
 
   .landing-section-title {
     font-size: 22px;
+  }
+
+  .landing-steps-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .landing-testimonials-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .landing-footer-links {

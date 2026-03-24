@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n-context";
 const tabs = [
   {
     labelKey: "nav_calc",
-    href: "/",
+    href: "/app",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
         <rect x="4" y="2" width="16" height="20" rx="2" />
@@ -22,7 +22,7 @@ const tabs = [
   },
   {
     labelKey: "nav_tpl",
-    href: "/strategies",
+    href: "/app/strategies",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
@@ -34,7 +34,7 @@ const tabs = [
   },
   {
     labelKey: "nav_log",
-    href: "/log",
+    href: "/app/log",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
         <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
@@ -46,7 +46,7 @@ const tabs = [
   },
   {
     labelKey: "nav_dash",
-    href: "/dashboard",
+    href: "/app/dashboard",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
         <line x1="18" y1="20" x2="18" y2="10" />
@@ -57,7 +57,7 @@ const tabs = [
   },
   {
     labelKey: "nav_settings",
-    href: "/settings",
+    href: "/app/settings",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
         <circle cx="12" cy="12" r="3" />
@@ -80,7 +80,7 @@ export default function BottomNav() {
       }}
     >
       {tabs.map((tab) => {
-        const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
+        const active = tab.href === "/app" ? pathname === "/app" : pathname.startsWith(tab.href);
         return (
           <Link
             key={tab.href}

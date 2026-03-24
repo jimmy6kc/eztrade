@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   // Redirect if already logged in
   if (user) {
-    router.replace("/");
+    router.replace("/app");
     return null;
   }
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
       } else {
         await signInWithEmail(email, password);
       }
-      router.push("/");
+      router.push("/app");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Authentication failed";
       setError(msg);
@@ -42,7 +42,7 @@ export default function LoginPage() {
     setError("");
     try {
       await signInWithGoogle();
-      router.push("/");
+      router.push("/app");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Google sign-in failed";
       setError(msg);
@@ -53,7 +53,7 @@ export default function LoginPage() {
     setError("");
     try {
       await signInWithApple();
-      router.push("/");
+      router.push("/app");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Apple sign-in failed";
       setError(msg);

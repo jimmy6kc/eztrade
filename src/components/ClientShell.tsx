@@ -5,19 +5,19 @@ import { I18nProvider } from "@/lib/i18n-context";
 import TopHeader from "@/components/TopHeader";
 import BottomNav from "@/components/BottomNav";
 
-const HIDE_CHROME_ROUTES = ["/landing", "/login", "/pricing"];
-
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideChrome = HIDE_CHROME_ROUTES.includes(pathname);
+
+  // Show TopHeader + BottomNav only for /app/* routes
+  const showChrome = pathname.startsWith("/app");
 
   return (
     <I18nProvider>
-      {!hideChrome && <TopHeader />}
-      <main className={hideChrome ? "" : "pt-top-header"}>
+      {showChrome && <TopHeader />}
+      <main className={showChrome ? "pt-top-header" : ""}>
         {children}
       </main>
-      {!hideChrome && <BottomNav />}
+      {showChrome && <BottomNav />}
     </I18nProvider>
   );
 }

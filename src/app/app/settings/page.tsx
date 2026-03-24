@@ -134,7 +134,7 @@ export default function SettingsPage() {
           <h1 className="text-lg font-bold" style={{ color: "var(--accent)" }}>
             {T("nav_settings")}
           </h1>
-          <Link href="/" className="text-xs" style={{ color: "var(--muted)" }}>
+          <Link href="/app" className="text-xs" style={{ color: "var(--muted)" }}>
             &larr; {T("back")}
           </Link>
         </div>
@@ -257,6 +257,21 @@ export default function SettingsPage() {
               {T("import_data")}
             </button>
           </div>
+        </Section>
+
+        {/* Contact Us */}
+        <Section title={T("contact_us")}>
+          <a
+            href="mailto:support@eztradeapp.com"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors"
+            style={{ background: "var(--accent)", color: "#fff", textDecoration: "none" }}
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+            support@eztradeapp.com
+          </a>
         </Section>
 
         {/* Version */}

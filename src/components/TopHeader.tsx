@@ -68,7 +68,7 @@ export default function TopHeader() {
       <div className="top-header-inner">
         {/* Left: brand */}
         <Link
-          href="/"
+          href="/app"
           className="top-header-brand"
           style={{ color: "var(--accent)" }}
         >
