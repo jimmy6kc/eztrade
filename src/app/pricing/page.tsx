@@ -243,17 +243,20 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-3xl font-bold" style={{ color: "var(--profit)", transition: "font-size 0.3s" }}>
-                        $94.95
+                        ${PRO_YEARLY_MONTHLY_EQUIV.toFixed(2)}
                       </span>
                       <span className="text-xs" style={{ color: "var(--muted)" }}>
-                        /year
+                        /month
                       </span>
                     </div>
+                    <p className="text-[13px] mt-1" style={{ color: "var(--muted)" }}>
+                      Billed $94.95/year
+                    </p>
                     <p className="text-xs font-bold mt-1" style={{ color: "var(--profit)" }}>
                       You save $24.93
                     </p>
-                    <p className="text-[11px] mt-0.5" style={{ color: "var(--muted)" }}>
-                      ${PRO_YEARLY_MONTHLY_EQUIV.toFixed(2)}/mo &mdash; Get 2 months free!
+                    <p className="text-[11px] mt-0.5" style={{ color: "var(--profit)" }}>
+                      Get 2 months free!
                     </p>
                   </>
                 ) : (
@@ -315,6 +318,26 @@ export default function PricingPage() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Refund guarantee badge */}
+        <div
+          className="rounded-xl p-3 text-center mt-3"
+          style={{
+            background: "rgba(76,175,80,0.08)",
+            border: "1px solid rgba(76,175,80,0.2)",
+          }}
+        >
+          <p className="text-[13px] font-semibold" style={{ color: "var(--profit)", margin: 0, lineHeight: 1.5 }}>
+            {"\u2705"} 7-Day Money-Back Guarantee
+          </p>
+          <p className="text-[11px] mt-1" style={{ color: "var(--muted)", margin: 0, lineHeight: 1.4 }}>
+            No questions asked. Just email{" "}
+            <a href="mailto:support@eztradeapp.com" style={{ color: "var(--profit)", textDecoration: "underline" }}>
+              support@eztradeapp.com
+            </a>{" "}
+            within 7 days for a full refund.
+          </p>
         </div>
 
         {/* Feature comparison table */}

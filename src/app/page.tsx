@@ -152,7 +152,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes. If you\u2019re not satisfied within the first 7 days of your Pro subscription, contact support@eztradeapp.com for a full refund.",
+    a: "Yes! We offer a 7-day no-questions-asked money-back guarantee. Simply email support@eztradeapp.com within 7 days of your purchase and we\u2019ll refund you in full. No hassle, no risk.",
   },
   {
     q: "Is my financial data secure?",
@@ -457,17 +457,20 @@ export default function LandingPage() {
                     </div>
                     <div className="landing-price-amount">
                       <span className="landing-price-dollar" style={{ color: "var(--profit)", fontSize: 42, transition: "font-size 0.3s" }}>
-                        $94.95
+                        $7.91
                       </span>
                       <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                        /year
+                        /month
                       </span>
                     </div>
+                    <p style={{ fontSize: 13, marginTop: 4, color: "var(--muted)" }}>
+                      Billed $94.95/year
+                    </p>
                     <p style={{ fontSize: 12, marginTop: 4, color: "var(--profit)", fontWeight: 700 }}>
                       You save $24.93
                     </p>
-                    <p style={{ fontSize: 11, marginTop: 2, color: "var(--muted)" }}>
-                      $7.91/mo &mdash; Get 2 months free!
+                    <p style={{ fontSize: 11, marginTop: 2, color: "var(--profit)" }}>
+                      Get 2 months free!
                     </p>
                   </>
                 ) : (
@@ -503,6 +506,33 @@ export default function LandingPage() {
                 {yearly ? "Get 2 Months Free" : "Upgrade to Pro"}
               </Link>
             </div>
+          </div>
+
+          {/* Refund guarantee badge */}
+          <div
+            style={{
+              marginTop: 24,
+              textAlign: "center",
+              padding: "14px 20px",
+              borderRadius: 12,
+              background: "rgba(76,175,80,0.08)",
+              border: "1px solid rgba(76,175,80,0.2)",
+              maxWidth: 520,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <p style={{ fontSize: 13, color: "var(--profit)", fontWeight: 600, margin: 0, lineHeight: 1.5 }}>
+              <span style={{ marginRight: 6 }}>{"\u2705"}</span>
+              7-Day Money-Back Guarantee
+            </p>
+            <p style={{ fontSize: 11, color: "var(--muted)", margin: "4px 0 0", lineHeight: 1.4 }}>
+              No questions asked. Just email{" "}
+              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--profit)", textDecoration: "underline" }}>
+                support@eztradeapp.com
+              </a>{" "}
+              within 7 days for a full refund.
+            </p>
           </div>
         </div>
       </section>
