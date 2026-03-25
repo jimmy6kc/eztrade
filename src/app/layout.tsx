@@ -7,10 +7,19 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "EZtrade - Position Size Calculator",
+  title: "EZtrade - Position Size Calculator & Trade Journal for Stocks & Futures",
   description:
-    "Professional position-size calculator for stocks & futures. Manage risk, log trades, and track performance.",
+    "Calculate position size, manage risk, and log your trades. Free trading calculator for stocks and futures with R:R analysis, cloud sync, and 12 languages. Start your free trial today.",
+  keywords:
+    "position size calculator, trade journal, trading calculator, stock calculator, futures calculator, risk management, R:R ratio, trading log, trade tracker",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "EZtrade - Position Size Calculator & Trade Journal for Stocks & Futures",
+    description:
+      "Calculate position size, manage risk, and log your trades. Free trading calculator for stocks and futures with R:R analysis, cloud sync, and 12 languages. Start your free trial today.",
+    type: "website",
+    url: "https://www.eztradeapp.com",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

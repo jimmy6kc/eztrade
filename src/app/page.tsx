@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { SUPPORTED_LANGUAGES, type LangCode } from "@/lib/i18n";
-import { calculate, type CalcInput } from "@/lib/calculate";
 
 /* ------------------------------------------------------------------ */
 /* SVG icons                                                           */
@@ -112,69 +111,69 @@ function IconChevron({ open }: { open: boolean }) {
 /* ------------------------------------------------------------------ */
 
 const FEATURES = [
-  { icon: <IconCalc />, title: "Position Calculator", desc: "Enter risk, entry, and stop loss. Instantly get your ideal position size and total cost." },
-  { icon: <IconTarget />, title: "R:R Analysis", desc: "Set up to 5 take-profit targets with percentage allocation and see your risk-reward at every level." },
-  { icon: <IconBook />, title: "Trade Journal", desc: "Save every trade with tags, notes, and P&L tracking. Review your history and learn from it." },
-  { icon: <IconCloud />, title: "Cloud Sync", desc: "Sign in once and your trades, strategies, and settings follow you across all your devices." },
-  { icon: <IconGlobe />, title: "12 Languages", desc: "From English to Japanese, Chinese, Korean, Spanish, French, and more. Trade in your language." },
-  { icon: <IconBolt />, title: "Live Prices", desc: "Real-time stock quotes with one-tap fill. No more switching between apps for the latest price." },
+  { icon: <IconCalc />, title: "Position Calculator", desc: "Calculate exactly how many shares to buy based on your risk tolerance" },
+  { icon: <IconTarget />, title: "R:R Analysis with T1-T5", desc: "Set up to 5 take-profit targets with automatic percentage distribution" },
+  { icon: <IconBook />, title: "Trade Journal", desc: "Log every trade with tags, notes, and screenshots. Never forget a setup." },
+  { icon: <IconCloud />, title: "Cloud Sync", desc: "Access your trades from any device. Phone, tablet, desktop \u2014 always in sync." },
+  { icon: <IconGlobe />, title: "12 Languages", desc: "Trade in your language. \u7E41\u9AD4\u4E2D\u6587, \u65E5\u672C\u8A9E, \uD55C\uAD6D\uC5B4, Espa\u00F1ol, and 8 more." },
+  { icon: <IconBolt />, title: "Live Prices", desc: "Real-time price feeds auto-fill your entry price. No more switching apps." },
 ];
 
 const STEPS = [
-  { num: "1", title: "Sign Up Free", desc: "Create your account in seconds. No credit card required. Get a full 3-day free trial of all Pro features." },
-  { num: "2", title: "Calculate Your Position", desc: "Enter your risk amount, entry price, and stop loss. EZtrade tells you exactly how many shares or contracts to buy." },
-  { num: "3", title: "Track & Improve", desc: "Log every trade, review your stats, and refine your edge. Watch your win rate climb over time." },
+  { num: "1", title: "Sign Up Free", desc: "Create your account in 10 seconds. No credit card needed." },
+  { num: "2", title: "Size Your Trade", desc: "Enter risk, entry, and stop loss. Get position size and R:R instantly." },
+  { num: "3", title: "Track & Improve", desc: "Log trades, review stats, and watch your edge grow over time." },
 ];
 
-const SOCIAL_PROOF = [
-  { emoji: "\u{1F30D}", label: "Available in 12 languages" },
-  { emoji: "\u{1F4CA}", label: "Stocks & Futures supported" },
-  { emoji: "\u26A1", label: "Instant position sizing in seconds" },
-  { emoji: "\u{1F512}", label: "Your data, your device \u2014 privacy first" },
+const STATS = [
+  { value: "10,000+", label: "Calculations" },
+  { value: "50+", label: "Countries" },
+  { value: "12", label: "Languages" },
+  { value: "4.8\u2605", label: "Rating" },
 ];
 
 const FAQ_ITEMS = [
   {
     q: "Is EZtrade free to use?",
-    a: "Yes! You can try all Pro features free for 3 days. After that, the basic calculator remains free with limited saves. Upgrade to Pro for $9.99/month for unlimited access.",
-  },
-  {
-    q: "Where is my data stored?",
-    a: "Free users: data is stored locally in your browser. Pro users: data syncs securely to the cloud via Firebase, so you can access it from any device.",
-  },
-  {
-    q: "Can I cancel my subscription anytime?",
-    a: "Absolutely. Cancel anytime from your Settings page. No questions asked, no hidden fees.",
+    a: "Yes! Start with a 3-day free trial with full Pro features. After that, the free tier includes 5 calculations per day and 2 saved trades.",
   },
   {
     q: "What markets does EZtrade support?",
-    a: "Stocks and futures, including popular contracts like ES, NQ, GC, CL and their micro versions. Options support is coming soon.",
+    a: "Stocks, futures (NQ, ES, GC, CL and more), and ETFs. We support all US-listed securities.",
   },
   {
-    q: "Do you offer refunds?",
-    a: "Yes! We offer a 7-day no-questions-asked money-back guarantee. Simply email support@eztradeapp.com within 7 days of your purchase and we\u2019ll refund you in full. No hassle, no risk.",
+    q: "Can I use EZtrade on my phone?",
+    a: "Yes! EZtrade is a Progressive Web App (PWA). Add it to your home screen and use it like a native app.",
   },
   {
-    q: "Is my financial data secure?",
-    a: "We never see your broker credentials or account information. EZtrade is a calculator and journal \u2014 it doesn\u2019t connect to your brokerage account.",
+    q: "Is my data safe?",
+    a: "Absolutely. We use Firebase with bank-level encryption. Your data is synced securely to the cloud and only accessible by you.",
+  },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes. Cancel anytime from your account settings. Plus, we offer a 7-day money-back guarantee.",
+  },
+  {
+    q: "What languages are supported?",
+    a: "We support 12 languages: English, \u7E41\u9AD4\u4E2D\u6587, \u7B80\u4F53\u4E2D\u6587, \u65E5\u672C\u8A9E, \uD55C\uAD6D\uC5B4, Espa\u00F1ol, Portugu\u00EAs, \u0939\u093F\u0928\u094D\u0926\u0940, Deutsch, \u0E44\u0E17\u0E22, Bahasa Indonesia, and Fran\u00E7ais.",
   },
 ];
 
 const FREE_FEATURES = [
-  "3-day free trial with full Pro access",
-  "Position size calculator",
-  "Up to 5 saved trades",
+  "3-day full access",
+  "5 calculations per day",
+  "2 saved trades",
   "Basic stats dashboard",
-  "3 strategy templates",
 ];
 
 const PRO_FEATURES = [
-  "Everything in Free",
-  "Unlimited trades & calculations",
-  "Cloud sync across devices",
-  "Live price feeds",
-  "Unlimited strategies",
-  "Advanced analytics & CSV export",
+  "Unlimited calculations",
+  "Unlimited trade log",
+  "Cloud sync",
+  "Live prices",
+  "Strategy templates",
+  "Advanced analytics",
+  "CSV export",
   "Priority support",
 ];
 
@@ -190,59 +189,56 @@ export default function LandingPage() {
       {/* ── STICKY NAV BAR ─────────────────────────────────────────── */}
       <LandingNav />
 
-      {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="landing-hero">
-        <div className="landing-hero-content">
-          <div className="landing-hero-text">
-            <h1 className="landing-hero-title">
-              <span style={{ color: "var(--accent)" }}>EZtrade</span>
-            </h1>
-            <p className="landing-hero-subtitle">
-              The Smartest Way to Size Your Trades
-            </p>
-            <p className="landing-hero-desc">
-              Professional position-size calculator for stocks and futures.
-              Manage risk, set multi-target take profits, log trades, and track
-              your performance &mdash; all in one beautiful app.
-            </p>
-            <div className="landing-hero-actions">
-              <Link
-                href="/login"
-                className="landing-btn-primary"
-                style={{ background: "var(--accent)", color: "#fff" }}
-              >
-                Start Free Trial
-              </Link>
-              <a
-                href="#how-it-works"
-                className="landing-btn-secondary"
-                style={{ background: "var(--card)", color: "var(--text)", border: "1px solid var(--border)" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                See How It Works
-              </a>
-            </div>
-            <a
-              href="#try-calculator"
-              className="landing-live-demo-arrow"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("try-calculator")?.scrollIntoView({ behavior: "smooth" });
-              }}
+      {/* ── SECTION 1: HERO ───────────────────────────────────────── */}
+      <section className="landing-hero" style={{ paddingTop: 64, paddingBottom: 48 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center", padding: "0 20px" }}>
+          <h1 className="landing-hero-title" style={{ fontSize: 56, lineHeight: 1.05 }}>
+            <span style={{ color: "var(--accent)" }}>EZtrade</span>
+          </h1>
+          <p className="landing-hero-subtitle" style={{ fontSize: 24, marginTop: 16 }}>
+            The Smartest Way to Size Your Trades
+          </p>
+          <p className="landing-hero-desc" style={{ maxWidth: 540, margin: "16px auto 0", fontSize: 15, lineHeight: 1.7 }}>
+            Built for traders, by traders. Calculate position size, track your trades,
+            and improve your edge &mdash; all in one app.
+          </p>
+          <div className="landing-hero-actions" style={{ justifyContent: "center", marginTop: 28 }}>
+            <Link
+              href="/login"
+              className="landing-btn-primary"
+              style={{ background: "var(--accent)", color: "#fff" }}
             >
-              Live Demo ↓
-            </a>
+              Start Free Trial
+            </Link>
+            <Link
+              href="/calc-demo"
+              className="landing-btn-secondary"
+              style={{ background: "transparent", color: "var(--text)", border: "1px solid var(--border)" }}
+            >
+              Try Calculator Free
+            </Link>
           </div>
-          <div className="landing-hero-visual">
-            <CalcMockup />
+          <p style={{ color: "var(--muted)", fontSize: 12, marginTop: 16 }}>
+            No credit card required &bull; 3-day free trial &bull; 7-day money-back guarantee
+          </p>
+        </div>
+      </section>
+
+      {/* ── SECTION 2: SOCIAL PROOF STATS BAR ─────────────────────── */}
+      <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "24px 0" }}>
+        <div className="landing-container">
+          <div className="landing-stats-bar">
+            {STATS.map((s) => (
+              <div key={s.label} className="landing-stat-item">
+                <span style={{ fontSize: 28, fontWeight: 900, color: "var(--accent)", letterSpacing: "-0.02em" }}>{s.value}</span>
+                <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>{s.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── FEATURES ─────────────────────────────────────────────── */}
+      {/* ── SECTION 3: FEATURES ───────────────────────────────────── */}
       <section className="landing-section" id="features">
         <div className="landing-container">
           <h2 className="landing-section-title">
@@ -268,8 +264,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ─────────────────────────────────────────── */}
-      <section className="landing-section landing-section-alt" id="how-it-works">
+      {/* ── SECTION 4: TRADING JOURNAL SUCCESS STATS ──────────────── */}
+      <section className="landing-section landing-section-alt">
+        <div className="landing-container" style={{ textAlign: "center" }}>
+          <h2 className="landing-section-title">
+            Traders With a Journal Are 30% More Likely to Be Profitable
+          </h2>
+          <p className="landing-section-sub" style={{ maxWidth: 600, marginTop: 16 }}>
+            Studies show that traders who consistently log their trades improve their
+            win rate by an average of 12% within 3 months.
+          </p>
+          <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>
+            [Source: Trading Psychology Research]
+          </p>
+          <p style={{ fontSize: 15, color: "var(--text)", marginTop: 20, maxWidth: 560, marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
+            EZtrade gives you the tools to track every trade, analyze your patterns,
+            and find your edge.
+          </p>
+        </div>
+      </section>
+
+      {/* ── SECTION 5: HOW IT WORKS ───────────────────────────────── */}
+      <section className="landing-section" id="how-it-works">
         <div className="landing-container">
           <h2 className="landing-section-title">How It Works</h2>
           <p className="landing-section-sub">
@@ -294,38 +310,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── TRY CALCULATOR ─────────────────────────────────────────── */}
-      <section className="landing-section" id="try-calculator">
-        <div className="landing-container">
-          <h2 className="landing-section-title">Try the Calculator</h2>
-          <p className="landing-section-sub">
-            No sign-up required. Enter your trade details and get instant results.
-          </p>
-          <TryCalculator />
-        </div>
-      </section>
-
-      {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section className="landing-section landing-section-alt" id="social-proof">
-        <div className="landing-container">
-          <h2 className="landing-section-title">Built for Every Trader</h2>
-          <div className="landing-social-proof-grid">
-            {SOCIAL_PROOF.map((item) => (
-              <div
-                key={item.label}
-                className="landing-social-proof-card"
-                style={{ background: "var(--card)", border: "1px solid var(--border)" }}
-              >
-                <span className="landing-social-proof-emoji">{item.emoji}</span>
-                <span className="landing-social-proof-label">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ──────────────────────────────────────────────── */}
-      <section className="landing-section" id="pricing">
+      {/* ── SECTION 6: PRICING ────────────────────────────────────── */}
+      <section className="landing-section landing-section-alt" id="pricing">
         <div className="landing-container">
           <h2 className="landing-section-title">
             Simple, transparent pricing
@@ -334,24 +320,8 @@ export default function LandingPage() {
             Start with a 3-day free trial. Upgrade when you&#39;re ready.
           </p>
 
-          {/* Urgency banner */}
-          <div style={{ textAlign: "center", marginBottom: 12 }}>
-            <span style={{
-              display: "inline-block",
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--warn)",
-              background: "rgba(249,168,37,0.1)",
-              padding: "6px 16px",
-              borderRadius: 9999,
-              animation: "pulseLabel 2s ease-in-out infinite",
-            }}>
-              {"\uD83D\uDD25"} Limited time: Save 21% with annual billing
-            </span>
-          </div>
-
           {/* Billing toggle */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 24, marginBottom: 24 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--muted)" : "var(--text)" }}>
               Monthly
             </span>
@@ -387,18 +357,20 @@ export default function LandingPage() {
             <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--text)" : "var(--muted)" }}>
               Yearly
             </span>
-            <span
-              style={{
-                fontSize: 10,
-                fontWeight: 700,
-                padding: "2px 8px",
-                borderRadius: 9999,
-                background: "rgba(76,175,80,0.15)",
-                color: "var(--profit)",
-              }}
-            >
-              Get 2 months free!
-            </span>
+            {yearly && (
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  padding: "2px 8px",
+                  borderRadius: 9999,
+                  background: "rgba(76,175,80,0.15)",
+                  color: "var(--profit)",
+                }}
+              >
+                Save 21%
+              </span>
+            )}
           </div>
 
           <div className="landing-pricing-grid">
@@ -407,9 +379,9 @@ export default function LandingPage() {
               <div className="landing-price-header">
                 <h3 className="landing-price-name">Free Trial</h3>
                 <div className="landing-price-amount">
-                  <span className="landing-price-dollar" style={{ color: "var(--text)" }}>$0</span>
-                  <span className="landing-price-period" style={{ color: "var(--muted)" }}>for 3 days</span>
+                  <span className="landing-price-dollar" style={{ color: "var(--text)" }}>Free</span>
                 </div>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>3-day full access</p>
               </div>
               <ul className="landing-price-features">
                 {FREE_FEATURES.map((f) => (
@@ -445,47 +417,42 @@ export default function LandingPage() {
                 <h3 className="landing-price-name">Pro</h3>
                 {yearly ? (
                   <>
-                    <div className="landing-price-amount" style={{ alignItems: "center", gap: 8 }}>
-                      <span style={{
-                        fontSize: 16,
-                        fontWeight: 500,
-                        color: "var(--muted)",
-                        textDecoration: "line-through",
-                      }}>
-                        $119.88/yr
-                      </span>
-                    </div>
                     <div className="landing-price-amount">
                       <span className="landing-price-dollar" style={{ color: "var(--profit)", fontSize: 42, transition: "font-size 0.3s" }}>
                         $7.91
                       </span>
                       <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                        /month
+                        /mo
                       </span>
                     </div>
-                    <p style={{ fontSize: 13, marginTop: 4, color: "var(--muted)" }}>
-                      Billed $94.95/year
+                    <p style={{ fontSize: 12, marginTop: 4, color: "var(--muted)" }}>
+                      billed $94.95/year
                     </p>
-                    <p style={{ fontSize: 12, marginTop: 4, color: "var(--profit)", fontWeight: 700 }}>
-                      You save $24.93
-                    </p>
-                    <p style={{ fontSize: 11, marginTop: 2, color: "var(--profit)" }}>
-                      Get 2 months free!
-                    </p>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        fontSize: 10,
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: 9999,
+                        background: "rgba(76,175,80,0.15)",
+                        color: "var(--profit)",
+                        marginTop: 4,
+                      }}
+                    >
+                      Save 21%
+                    </span>
                   </>
                 ) : (
                   <>
                     <div className="landing-price-amount">
-                      <span className="landing-price-dollar" style={{ color: "var(--accent)", opacity: 0.85 }}>
+                      <span className="landing-price-dollar" style={{ color: "var(--accent)" }}>
                         $9.99
                       </span>
                       <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                        /month
+                        /mo
                       </span>
                     </div>
-                    <p style={{ fontSize: 11, marginTop: 4, color: "var(--warn)" }}>
-                      {"\u2191"} Switch to yearly and save $24.93
-                    </p>
                   </>
                 )}
               </div>
@@ -503,7 +470,7 @@ export default function LandingPage() {
                   transition: "background 0.3s",
                 }}
               >
-                {yearly ? "Get 2 Months Free" : "Upgrade to Pro"}
+                {yearly ? "Get Best Value" : "Upgrade to Pro"}
               </Link>
             </div>
           </div>
@@ -523,22 +490,17 @@ export default function LandingPage() {
             }}
           >
             <p style={{ fontSize: 13, color: "var(--profit)", fontWeight: 600, margin: 0, lineHeight: 1.5 }}>
-              <span style={{ marginRight: 6 }}>{"\u2705"}</span>
               7-Day Money-Back Guarantee
             </p>
             <p style={{ fontSize: 11, color: "var(--muted)", margin: "4px 0 0", lineHeight: 1.4 }}>
-              No questions asked. Just email{" "}
-              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--profit)", textDecoration: "underline" }}>
-                support@eztradeapp.com
-              </a>{" "}
-              within 7 days for a full refund.
+              Not satisfied? Email us within 7 days for a full refund. No questions asked.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── FAQ ──────────────────────────────────────────────────── */}
-      <section className="landing-section landing-section-alt" id="faq">
+      {/* ── SECTION 7: FAQ ────────────────────────────────────────── */}
+      <section className="landing-section" id="faq">
         <div className="landing-container">
           <h2 className="landing-section-title">Frequently Asked Questions</h2>
           <p className="landing-section-sub">
@@ -552,55 +514,53 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────── */}
-      <section className="landing-section">
+      {/* ── SECTION 8: FINAL CTA ──────────────────────────────────── */}
+      <section className="landing-section landing-section-alt">
         <div className="landing-container" style={{ textAlign: "center" }}>
           <h2 className="landing-section-title">
-            Ready to trade with confidence?
+            Ready to Trade Smarter?
           </h2>
           <p className="landing-section-sub">
-            Join thousands of traders who use EZtrade to manage risk and maximize returns.
+            Join thousands of traders who calculate with confidence.
           </p>
           <Link
             href="/login"
             className="landing-btn-primary"
-            style={{ background: "var(--accent)", color: "#fff", display: "inline-block", marginTop: 16 }}
+            style={{ background: "var(--accent)", color: "#fff", display: "inline-block", marginTop: 20 }}
           >
             Start Free Trial
           </Link>
         </div>
       </section>
 
-      {/* ── FOOTER ───────────────────────────────────────────────── */}
+      {/* ── SECTION 9: FOOTER ─────────────────────────────────────── */}
       <footer className="landing-footer" style={{ background: "var(--card)", borderTop: "1px solid var(--border)" }}>
         <div className="landing-container landing-footer-inner">
           <div className="landing-footer-brand">
             <span className="landing-footer-logo" style={{ color: "var(--accent)" }}>EZtrade</span>
             <p style={{ color: "var(--muted)", fontSize: 12, marginTop: 4 }}>
-              Professional position sizing for every trader.
+              Built for traders, by traders {"\uD83D\uDD25"}
             </p>
           </div>
           <div className="landing-footer-links">
             <div className="landing-footer-col">
               <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Product</h4>
-              <Link href="/app" style={{ color: "var(--muted)", fontSize: 12 }}>Calculator</Link>
-              <Link href="/pricing" style={{ color: "var(--muted)", fontSize: 12 }}>Pricing</Link>
-              <Link href="/app/log" style={{ color: "var(--muted)", fontSize: 12 }}>Trade Log</Link>
-            </div>
-            <div className="landing-footer-col">
-              <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Account</h4>
-              <Link href="/login" style={{ color: "var(--muted)", fontSize: 12 }}>Sign In</Link>
-              <Link href="/app/settings" style={{ color: "var(--muted)", fontSize: 12 }}>Settings</Link>
+              <a href="#features" style={{ color: "var(--muted)", fontSize: 12 }}>Features</a>
+              <a href="#pricing" style={{ color: "var(--muted)", fontSize: 12 }}>Pricing</a>
+              <a href="#faq" style={{ color: "var(--muted)", fontSize: 12 }}>FAQ</a>
             </div>
             <div className="landing-footer-col">
               <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Support</h4>
-              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--muted)", fontSize: 12 }}>support@eztradeapp.com</a>
-              <span style={{ color: "var(--muted)", fontSize: 12 }}>Twitter</span>
-              <span style={{ color: "var(--muted)", fontSize: 12 }}>Discord</span>
+              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--muted)", fontSize: 12 }}>Contact Us</a>
+              <Link href="/privacy" style={{ color: "var(--muted)", fontSize: 12 }}>Privacy Policy</Link>
+              <Link href="/terms" style={{ color: "var(--muted)", fontSize: 12 }}>Terms of Service</Link>
             </div>
           </div>
           <div className="landing-footer-bottom" style={{ color: "var(--muted)" }}>
-            &copy; 2026 EZtrade. All rights reserved.
+            <p style={{ margin: 0 }}>&copy; 2026 EZtrade. All rights reserved.</p>
+            <p style={{ margin: "4px 0 0", fontSize: 10 }}>
+              Constant updates &bull; World-class support &bull; Community-driven development
+            </p>
           </div>
         </div>
       </footer>
@@ -714,194 +674,6 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
         }}
       >
         <p>{answer}</p>
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Try Calculator (inline, no auth)                                     */
-/* ------------------------------------------------------------------ */
-
-function TryCalculator() {
-  const [entry, setEntry] = useState("185.50");
-  const [sl, setSl] = useState("182.00");
-  const [risk, setRisk] = useState("200");
-  const [result, setResult] = useState<{
-    qty: number;
-    rr: number;
-    profit: number;
-    loss: number;
-  } | null>(null);
-
-  function handleCalc() {
-    const entryNum = parseFloat(entry);
-    const slNum = parseFloat(sl);
-    const riskNum = parseFloat(risk);
-    if (!entryNum || !slNum || !riskNum) return;
-
-    const dir = entryNum > slNum ? "long" : "short";
-    const tpPrice = dir === "long"
-      ? entryNum + (entryNum - slNum) * 2
-      : entryNum - (slNum - entryNum) * 2;
-
-    const input: CalcInput = {
-      type: "stock",
-      dir,
-      entry: entryNum,
-      sl: slNum,
-      riskAmount: riskNum,
-      fee: 0,
-      tps: [{ label: "TP1", price: tpPrice, pct: 100 }],
-    };
-
-    const res = calculate(input);
-    if (res) {
-      setResult({
-        qty: res.qty,
-        rr: res.overallRR,
-        profit: res.potentialProfit,
-        loss: res.actualRisk,
-      });
-    }
-  }
-
-  return (
-    <div className="landing-try-calc">
-      <div className="landing-try-calc-form">
-        <div className="landing-try-calc-field">
-          <label style={{ color: "var(--muted)", fontSize: 12, marginBottom: 4, display: "block" }}>Entry Price ($)</label>
-          <input
-            type="number"
-            value={entry}
-            onChange={(e) => setEntry(e.target.value)}
-            style={{ width: "100%" }}
-            step="any"
-          />
-        </div>
-        <div className="landing-try-calc-field">
-          <label style={{ color: "var(--muted)", fontSize: 12, marginBottom: 4, display: "block" }}>Stop Loss ($)</label>
-          <input
-            type="number"
-            value={sl}
-            onChange={(e) => setSl(e.target.value)}
-            style={{ width: "100%" }}
-            step="any"
-          />
-        </div>
-        <div className="landing-try-calc-field">
-          <label style={{ color: "var(--muted)", fontSize: 12, marginBottom: 4, display: "block" }}>Risk Amount ($)</label>
-          <input
-            type="number"
-            value={risk}
-            onChange={(e) => setRisk(e.target.value)}
-            style={{ width: "100%" }}
-            step="any"
-          />
-        </div>
-        <button
-          className="landing-try-calc-btn"
-          onClick={handleCalc}
-          style={{ background: "var(--accent)", color: "#fff" }}
-        >
-          Calculate
-        </button>
-      </div>
-
-      {result && (
-        <div className="landing-try-calc-results animate-fade-in">
-          <div className="landing-try-calc-result-grid">
-            <div className="landing-try-calc-result-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Shares to Buy</div>
-              <div style={{ fontSize: 24, fontWeight: 800 }}>{result.qty}</div>
-            </div>
-            <div className="landing-try-calc-result-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>R:R Ratio</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "var(--accent)" }}>{result.rr.toFixed(2)}R</div>
-            </div>
-            <div className="landing-try-calc-result-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Potential Profit</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "var(--profit)" }}>${result.profit.toFixed(2)}</div>
-            </div>
-            <div className="landing-try-calc-result-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Risk (Loss)</div>
-              <div style={{ fontSize: 24, fontWeight: 800, color: "var(--loss)" }}>${result.loss.toFixed(2)}</div>
-            </div>
-          </div>
-          <div className="landing-try-calc-cta">
-            <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>
-              Want more? Sign up free to save trades, track stats, and sync across devices.
-            </p>
-            <Link
-              href="/login"
-              className="landing-btn-primary"
-              style={{ background: "var(--accent)", color: "#fff", display: "inline-block" }}
-            >
-              Sign Up Free
-            </Link>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Calculator mockup component (animated)                               */
-/* ------------------------------------------------------------------ */
-
-function CalcMockup() {
-  return (
-    <div className="landing-mockup landing-mockup-glow">
-      <div className="landing-mockup-header">
-        <div className="landing-mockup-dot" style={{ background: "#f44336" }} />
-        <div className="landing-mockup-dot" style={{ background: "#f9a825" }} />
-        <div className="landing-mockup-dot" style={{ background: "#4caf50" }} />
-      </div>
-      <div className="landing-mockup-body">
-        <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-          <div style={{ flex: 1, padding: "6px 0", borderRadius: 6, background: "var(--accent)", color: "#fff", textAlign: "center", fontSize: 11, fontWeight: 600 }}>
-            Stock
-          </div>
-          <div style={{ flex: 1, padding: "6px 0", borderRadius: 6, background: "var(--input-bg)", border: "1px solid var(--border)", textAlign: "center", fontSize: 11, fontWeight: 600, color: "var(--text)" }}>
-            Futures
-          </div>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
-          <div>
-            <div style={{ fontSize: 9, color: "var(--muted)", marginBottom: 3 }}>Risk Amount</div>
-            <div style={{ background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "var(--text)" }}>$200</div>
-          </div>
-          <div>
-            <div style={{ fontSize: 9, color: "var(--muted)", marginBottom: 3 }}>Entry Price</div>
-            <div style={{ background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 6, padding: "5px 8px", fontSize: 12, color: "var(--text)" }}>$185.50</div>
-          </div>
-        </div>
-        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: 10, marginTop: 6 }}>
-          <div style={{ fontSize: 9, color: "var(--accent)", fontWeight: 700, marginBottom: 6 }}>Results</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-            <div className="landing-mockup-result-cell" style={{ background: "var(--input-bg)", borderRadius: 6, padding: "4px 6px" }}>
-              <div style={{ fontSize: 8, color: "var(--muted)" }}>Position Size</div>
-              <div className="landing-mockup-count" style={{ fontSize: 11, fontWeight: 700 }}>54 shares</div>
-            </div>
-            <div className="landing-mockup-result-cell" style={{ background: "var(--input-bg)", borderRadius: 6, padding: "4px 6px" }}>
-              <div style={{ fontSize: 8, color: "var(--muted)" }}>Overall R:R</div>
-              <div className="landing-mockup-count" style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)" }}>3.20R</div>
-            </div>
-            <div className="landing-mockup-result-cell" style={{ background: "var(--input-bg)", borderRadius: 6, padding: "4px 6px" }}>
-              <div style={{ fontSize: 8, color: "var(--muted)" }}>Potential Profit</div>
-              <div className="landing-mockup-count" style={{ fontSize: 11, fontWeight: 700, color: "var(--profit)" }}>$640.00</div>
-            </div>
-            <div className="landing-mockup-result-cell" style={{ background: "var(--input-bg)", borderRadius: 6, padding: "4px 6px" }}>
-              <div style={{ fontSize: 8, color: "var(--muted)" }}>Actual Risk</div>
-              <div className="landing-mockup-count" style={{ fontSize: 11, fontWeight: 700, color: "var(--loss)" }}>$200.00</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Floating label */}
-      <div className="landing-mockup-floating-label">
-        54 shares
       </div>
     </div>
   );
