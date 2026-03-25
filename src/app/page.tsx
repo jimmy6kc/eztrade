@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { SUPPORTED_LANGUAGES, type LangCode } from "@/lib/i18n";
+import { useI18n, SUPPORTED_LANGUAGES, type LangCode } from "@/lib/i18n-context";
 
 /* ------------------------------------------------------------------ */
 /* SVG icons                                                           */
@@ -107,100 +107,78 @@ function IconChevron({ open }: { open: boolean }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
-
-const FEATURES = [
-  { icon: <IconCalc />, title: "Position Calculator", desc: "Calculate exactly how many shares to buy based on your risk tolerance" },
-  { icon: <IconTarget />, title: "R:R Analysis with T1-T5", desc: "Set up to 5 take-profit targets with automatic percentage distribution" },
-  { icon: <IconBook />, title: "Trade Journal", desc: "Log every trade with tags, notes, and screenshots. Never forget a setup." },
-  { icon: <IconCloud />, title: "Cloud Sync", desc: "Access your trades from any device. Phone, tablet, desktop \u2014 always in sync." },
-  { icon: <IconGlobe />, title: "12 Languages", desc: "Trade in your language. \u7E41\u9AD4\u4E2D\u6587, \u65E5\u672C\u8A9E, \uD55C\uAD6D\uC5B4, Espa\u00F1ol, and 8 more." },
-  { icon: <IconBolt />, title: "Live Prices", desc: "Real-time price feeds auto-fill your entry price. No more switching apps." },
-];
-
-const STEPS = [
-  { num: "1", title: "Sign Up Free", desc: "Create your account in 10 seconds. No credit card needed." },
-  { num: "2", title: "Size Your Trade", desc: "Enter risk, entry, and stop loss. Get position size and R:R instantly." },
-  { num: "3", title: "Track & Improve", desc: "Log trades, review stats, and watch your edge grow over time." },
-];
-
-const STATS = [
-  { value: "10,000+", label: "Calculations" },
-  { value: "50+", label: "Countries" },
-  { value: "12", label: "Languages" },
-  { value: "4.8\u2605", label: "Rating" },
-];
-
-const FAQ_ITEMS = [
-  {
-    q: "Is EZtrade free to use?",
-    a: "Yes! Start with a 3-day free trial with full Pro features. After that, the free tier includes 5 calculations per day and 2 saved trades.",
-  },
-  {
-    q: "What markets does EZtrade support?",
-    a: "Stocks, futures (NQ, ES, GC, CL and more), and ETFs. We support all US-listed securities.",
-  },
-  {
-    q: "Can I use EZtrade on my phone?",
-    a: "Yes! EZtrade is a Progressive Web App (PWA). Add it to your home screen and use it like a native app.",
-  },
-  {
-    q: "Is my data safe?",
-    a: "Absolutely. We use Firebase with bank-level encryption. Your data is synced securely to the cloud and only accessible by you.",
-  },
-  {
-    q: "Can I cancel anytime?",
-    a: "Yes. Cancel anytime from your account settings. Plus, we offer a 7-day money-back guarantee.",
-  },
-  {
-    q: "What languages are supported?",
-    a: "We support 12 languages: English, \u7E41\u9AD4\u4E2D\u6587, \u7B80\u4F53\u4E2D\u6587, \u65E5\u672C\u8A9E, \uD55C\uAD6D\uC5B4, Espa\u00F1ol, Portugu\u00EAs, \u0939\u093F\u0928\u094D\u0926\u0940, Deutsch, \u0E44\u0E17\u0E22, Bahasa Indonesia, and Fran\u00E7ais.",
-  },
-];
-
-const FREE_FEATURES = [
-  "3-day full access",
-  "5 calculations per day",
-  "2 saved trades",
-  "Basic stats dashboard",
-];
-
-const PRO_FEATURES = [
-  "Unlimited calculations",
-  "Unlimited trade log",
-  "Cloud sync",
-  "Live prices",
-  "Strategy templates",
-  "Advanced analytics",
-  "CSV export",
-  "Priority support",
-];
-
-/* ------------------------------------------------------------------ */
 /* Landing Page                                                        */
 /* ------------------------------------------------------------------ */
 
 export default function LandingPage() {
   const [yearly, setYearly] = useState(true);
+  const { T } = useI18n();
+
+  const FEATURES = [
+    { icon: <IconCalc />, titleKey: "landing_feat_calc_title", descKey: "landing_feat_calc_desc" },
+    { icon: <IconTarget />, titleKey: "landing_feat_rr_title", descKey: "landing_feat_rr_desc" },
+    { icon: <IconBook />, titleKey: "landing_feat_journal_title", descKey: "landing_feat_journal_desc" },
+    { icon: <IconCloud />, titleKey: "landing_feat_sync_title", descKey: "landing_feat_sync_desc" },
+    { icon: <IconGlobe />, titleKey: "landing_feat_lang_title", descKey: "landing_feat_lang_desc" },
+    { icon: <IconBolt />, titleKey: "landing_feat_price_title", descKey: "landing_feat_price_desc" },
+  ];
+
+  const STEPS = [
+    { num: "1", titleKey: "landing_step1_title", descKey: "landing_step1_desc" },
+    { num: "2", titleKey: "landing_step2_title", descKey: "landing_step2_desc" },
+    { num: "3", titleKey: "landing_step3_title", descKey: "landing_step3_desc" },
+  ];
+
+  const STATS = [
+    { value: "10,000+", labelKey: "landing_stats_calcs" },
+    { value: "50+", labelKey: "landing_stats_countries" },
+    { value: "12", labelKey: "landing_stats_languages" },
+    { value: "4.8\u2605", labelKey: "landing_stats_rating" },
+  ];
+
+  const FAQ_ITEMS = [
+    { qKey: "landing_faq1_q", aKey: "landing_faq1_a" },
+    { qKey: "landing_faq2_q", aKey: "landing_faq2_a" },
+    { qKey: "landing_faq3_q", aKey: "landing_faq3_a" },
+    { qKey: "landing_faq4_q", aKey: "landing_faq4_a" },
+    { qKey: "landing_faq5_q", aKey: "landing_faq5_a" },
+    { qKey: "landing_faq6_q", aKey: "landing_faq6_a" },
+  ];
+
+  const FREE_FEATURES_KEYS = [
+    "landing_free_f1",
+    "landing_free_f2",
+    "landing_free_f3",
+    "landing_free_f4",
+  ];
+
+  const PRO_FEATURES_KEYS = [
+    "landing_pro_f1",
+    "landing_pro_f2",
+    "landing_pro_f3",
+    "landing_pro_f4",
+    "landing_pro_f5",
+    "landing_pro_f6",
+    "landing_pro_f7",
+    "landing_pro_f8",
+  ];
 
   return (
     <div className="landing-root">
-      {/* ── STICKY NAV BAR ─────────────────────────────────────────── */}
+      {/* -- STICKY NAV BAR -- */}
       <LandingNav />
 
-      {/* ── SECTION 1: HERO ───────────────────────────────────────── */}
+      {/* -- SECTION 1: HERO -- */}
       <section className="landing-hero" style={{ paddingTop: 64, paddingBottom: 48 }}>
         <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center", padding: "0 20px" }}>
           <h1 className="landing-hero-title" style={{ fontSize: 56, lineHeight: 1.05 }}>
             <span style={{ color: "var(--accent)" }}>EZtrade</span>
           </h1>
           <p className="landing-hero-subtitle" style={{ fontSize: 24, marginTop: 16 }}>
-            The Smartest Way to Size Your Trades
+            {T("landing_tagline")}
           </p>
           <p className="landing-hero-desc" style={{ maxWidth: 540, margin: "16px auto 0", fontSize: 15, lineHeight: 1.7 }}>
-            Built for traders, by traders. Calculate position size, track your trades,
-            and improve your edge &mdash; all in one app.
+            {T("landing_subtitle")}
           </p>
           <div className="landing-hero-actions" style={{ justifyContent: "center", marginTop: 28 }}>
             <Link
@@ -208,55 +186,54 @@ export default function LandingPage() {
               className="landing-btn-primary"
               style={{ background: "var(--accent)", color: "#fff" }}
             >
-              Start Free Trial
+              {T("landing_start_trial")}
             </Link>
             <Link
               href="/calc-demo"
               className="landing-btn-secondary"
               style={{ background: "transparent", color: "var(--text)", border: "1px solid var(--border)" }}
             >
-              Try Calculator Free
+              {T("landing_try_free")}
             </Link>
           </div>
           <p style={{ color: "var(--muted)", fontSize: 12, marginTop: 16 }}>
-            No credit card required &bull; 3-day free trial &bull; 7-day money-back guarantee
+            {T("landing_trust")}
           </p>
         </div>
       </section>
 
-      {/* ── SECTION 2: SOCIAL PROOF STATS BAR ─────────────────────── */}
+      {/* -- SECTION 2: SOCIAL PROOF STATS BAR -- */}
       <section style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "24px 0" }}>
         <div className="landing-container">
           <div className="landing-stats-bar">
             {STATS.map((s) => (
-              <div key={s.label} className="landing-stat-item">
+              <div key={s.labelKey} className="landing-stat-item">
                 <span style={{ fontSize: 28, fontWeight: 900, color: "var(--accent)", letterSpacing: "-0.02em" }}>{s.value}</span>
-                <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>{s.label}</span>
+                <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>{T(s.labelKey)}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SECTION 3: FEATURES ───────────────────────────────────── */}
+      {/* -- SECTION 3: FEATURES -- */}
       <section className="landing-section" id="features">
         <div className="landing-container">
           <h2 className="landing-section-title">
-            Everything you need to trade smarter
+            {T("landing_features_title")}
           </h2>
           <p className="landing-section-sub">
-            Built by traders, for traders. Every feature is designed to help you
-            manage risk and stay disciplined.
+            {T("landing_features_sub")}
           </p>
           <div className="landing-features-grid">
             {FEATURES.map((f) => (
-              <div key={f.title} className="landing-feature-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+              <div key={f.titleKey} className="landing-feature-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
                 <div className="landing-feature-icon-wrap" style={{ color: "var(--accent)" }}>
                   {f.icon}
                 </div>
-                <h3 className="landing-feature-title">{f.title}</h3>
+                <h3 className="landing-feature-title">{T(f.titleKey)}</h3>
                 <p className="landing-feature-desc" style={{ color: "var(--muted)" }}>
-                  {f.desc}
+                  {T(f.descKey)}
                 </p>
               </div>
             ))}
@@ -264,32 +241,30 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── SECTION 4: TRADING JOURNAL SUCCESS STATS ──────────────── */}
+      {/* -- SECTION 4: TRADING JOURNAL SUCCESS STATS -- */}
       <section className="landing-section landing-section-alt">
         <div className="landing-container" style={{ textAlign: "center" }}>
           <h2 className="landing-section-title">
-            Traders With a Journal Are 30% More Likely to Be Profitable
+            {T("landing_journal_title")}
           </h2>
           <p className="landing-section-sub" style={{ maxWidth: 600, marginTop: 16 }}>
-            Studies show that traders who consistently log their trades improve their
-            win rate by an average of 12% within 3 months.
+            {T("landing_journal_desc")}
           </p>
           <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>
             [Source: Trading Psychology Research]
           </p>
           <p style={{ fontSize: 15, color: "var(--text)", marginTop: 20, maxWidth: 560, marginLeft: "auto", marginRight: "auto", lineHeight: 1.7 }}>
-            EZtrade gives you the tools to track every trade, analyze your patterns,
-            and find your edge.
+            {T("landing_journal_cta")}
           </p>
         </div>
       </section>
 
-      {/* ── SECTION 5: HOW IT WORKS ───────────────────────────────── */}
+      {/* -- SECTION 5: HOW IT WORKS -- */}
       <section className="landing-section" id="how-it-works">
         <div className="landing-container">
-          <h2 className="landing-section-title">How It Works</h2>
+          <h2 className="landing-section-title">{T("landing_how_title")}</h2>
           <p className="landing-section-sub">
-            Get from zero to your first trade in under a minute.
+            {T("landing_how_sub")}
           </p>
           <div className="landing-steps-grid">
             {STEPS.map((s) => (
@@ -300,9 +275,9 @@ export default function LandingPage() {
                 >
                   {s.num}
                 </div>
-                <h3 className="landing-feature-title">{s.title}</h3>
+                <h3 className="landing-feature-title">{T(s.titleKey)}</h3>
                 <p className="landing-feature-desc" style={{ color: "var(--muted)" }}>
-                  {s.desc}
+                  {T(s.descKey)}
                 </p>
               </div>
             ))}
@@ -310,20 +285,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── SECTION 6: PRICING ────────────────────────────────────── */}
+      {/* -- SECTION 6: PRICING -- */}
       <section className="landing-section landing-section-alt" id="pricing">
         <div className="landing-container">
           <h2 className="landing-section-title">
-            Simple, transparent pricing
+            {T("landing_pricing_title")}
           </h2>
           <p className="landing-section-sub">
-            Start with a 3-day free trial. Upgrade when you&#39;re ready.
+            {T("landing_pricing_subtitle")}
           </p>
 
           {/* Billing toggle */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 24, marginBottom: 24 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--muted)" : "var(--text)" }}>
-              Monthly
+              {T("landing_monthly")}
             </span>
             <button
               onClick={() => setYearly((v) => !v)}
@@ -355,7 +330,7 @@ export default function LandingPage() {
               />
             </button>
             <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "var(--text)" : "var(--muted)" }}>
-              Yearly
+              {T("landing_yearly")}
             </span>
             {yearly && (
               <span
@@ -368,7 +343,7 @@ export default function LandingPage() {
                   color: "var(--profit)",
                 }}
               >
-                Save 21%
+                {T("landing_save")}
               </span>
             )}
           </div>
@@ -377,15 +352,15 @@ export default function LandingPage() {
             {/* Free Trial */}
             <div className="landing-price-card" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
               <div className="landing-price-header">
-                <h3 className="landing-price-name">Free Trial</h3>
+                <h3 className="landing-price-name">{T("landing_free_trial")}</h3>
                 <div className="landing-price-amount">
-                  <span className="landing-price-dollar" style={{ color: "var(--text)" }}>Free</span>
+                  <span className="landing-price-dollar" style={{ color: "var(--text)" }}>{T("landing_free_price")}</span>
                 </div>
-                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>3-day full access</p>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>{T("landing_free_period")}</p>
               </div>
               <ul className="landing-price-features">
-                {FREE_FEATURES.map((f) => (
-                  <li key={f}><IconCheck /> <span>{f}</span></li>
+                {FREE_FEATURES_KEYS.map((k) => (
+                  <li key={k}><IconCheck /> <span>{T(k)}</span></li>
                 ))}
               </ul>
               <Link
@@ -393,7 +368,7 @@ export default function LandingPage() {
                 className="landing-price-btn"
                 style={{ background: "var(--border)", color: "var(--text)" }}
               >
-                Start Free Trial
+                {T("landing_start_trial")}
               </Link>
             </div>
 
@@ -411,10 +386,10 @@ export default function LandingPage() {
                 color: "#fff",
                 transition: "background 0.3s",
               }}>
-                {yearly ? "BEST VALUE" : "POPULAR"}
+                {yearly ? T("landing_best_value") : T("landing_popular")}
               </div>
               <div className="landing-price-header">
-                <h3 className="landing-price-name">Pro</h3>
+                <h3 className="landing-price-name">{T("landing_pro")}</h3>
                 {yearly ? (
                   <>
                     <div className="landing-price-amount">
@@ -422,11 +397,11 @@ export default function LandingPage() {
                         $7.91
                       </span>
                       <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                        /mo
+                        {T("landing_per_month")}
                       </span>
                     </div>
                     <p style={{ fontSize: 12, marginTop: 4, color: "var(--muted)" }}>
-                      billed $94.95/year
+                      {T("landing_billed_yearly")}
                     </p>
                     <span
                       style={{
@@ -440,7 +415,7 @@ export default function LandingPage() {
                         marginTop: 4,
                       }}
                     >
-                      Save 21%
+                      {T("landing_save")}
                     </span>
                   </>
                 ) : (
@@ -450,15 +425,15 @@ export default function LandingPage() {
                         $9.99
                       </span>
                       <span className="landing-price-period" style={{ color: "var(--muted)" }}>
-                        /mo
+                        {T("landing_per_month")}
                       </span>
                     </div>
                   </>
                 )}
               </div>
               <ul className="landing-price-features">
-                {PRO_FEATURES.map((f) => (
-                  <li key={f}><IconCheck /> <span>{f}</span></li>
+                {PRO_FEATURES_KEYS.map((k) => (
+                  <li key={k}><IconCheck /> <span>{T(k)}</span></li>
                 ))}
               </ul>
               <Link
@@ -470,7 +445,7 @@ export default function LandingPage() {
                   transition: "background 0.3s",
                 }}
               >
-                {yearly ? "Get Best Value" : "Upgrade to Pro"}
+                {yearly ? T("landing_get_best") : T("landing_upgrade_pro")}
               </Link>
             </div>
           </div>
@@ -490,76 +465,76 @@ export default function LandingPage() {
             }}
           >
             <p style={{ fontSize: 13, color: "var(--profit)", fontWeight: 600, margin: 0, lineHeight: 1.5 }}>
-              7-Day Money-Back Guarantee
+              {T("landing_refund_title")}
             </p>
             <p style={{ fontSize: 11, color: "var(--muted)", margin: "4px 0 0", lineHeight: 1.4 }}>
-              Not satisfied? Email us within 7 days for a full refund. No questions asked.
+              {T("landing_refund_desc")}
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── SECTION 7: FAQ ────────────────────────────────────────── */}
+      {/* -- SECTION 7: FAQ -- */}
       <section className="landing-section" id="faq">
         <div className="landing-container">
-          <h2 className="landing-section-title">Frequently Asked Questions</h2>
+          <h2 className="landing-section-title">{T("landing_faq_title")}</h2>
           <p className="landing-section-sub">
-            Got questions? We have answers.
+            {T("landing_faq_sub")}
           </p>
           <div className="landing-faq-list">
             {FAQ_ITEMS.map((item) => (
-              <FaqItem key={item.q} question={item.q} answer={item.a} />
+              <FaqItem key={item.qKey} question={T(item.qKey)} answer={T(item.aKey)} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SECTION 8: FINAL CTA ──────────────────────────────────── */}
+      {/* -- SECTION 8: FINAL CTA -- */}
       <section className="landing-section landing-section-alt">
         <div className="landing-container" style={{ textAlign: "center" }}>
           <h2 className="landing-section-title">
-            Ready to Trade Smarter?
+            {T("landing_final_title")}
           </h2>
           <p className="landing-section-sub">
-            Join thousands of traders who calculate with confidence.
+            {T("landing_final_subtitle")}
           </p>
           <Link
             href="/login"
             className="landing-btn-primary"
             style={{ background: "var(--accent)", color: "#fff", display: "inline-block", marginTop: 20 }}
           >
-            Start Free Trial
+            {T("landing_start_trial")}
           </Link>
         </div>
       </section>
 
-      {/* ── SECTION 9: FOOTER ─────────────────────────────────────── */}
+      {/* -- SECTION 9: FOOTER -- */}
       <footer className="landing-footer" style={{ background: "var(--card)", borderTop: "1px solid var(--border)" }}>
         <div className="landing-container landing-footer-inner">
           <div className="landing-footer-brand">
             <span className="landing-footer-logo" style={{ color: "var(--accent)" }}>EZtrade</span>
             <p style={{ color: "var(--muted)", fontSize: 12, marginTop: 4 }}>
-              Built for traders, by traders {"\uD83D\uDD25"}
+              {T("landing_footer_tagline")} {"\uD83D\uDD25"}
             </p>
           </div>
           <div className="landing-footer-links">
             <div className="landing-footer-col">
-              <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Product</h4>
-              <a href="#features" style={{ color: "var(--muted)", fontSize: 12 }}>Features</a>
-              <a href="#pricing" style={{ color: "var(--muted)", fontSize: 12 }}>Pricing</a>
-              <a href="#faq" style={{ color: "var(--muted)", fontSize: 12 }}>FAQ</a>
+              <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>{T("landing_footer_product")}</h4>
+              <a href="#features" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_features")}</a>
+              <a href="#pricing" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_pricing")}</a>
+              <a href="#faq" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_faq")}</a>
             </div>
             <div className="landing-footer-col">
-              <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Support</h4>
-              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--muted)", fontSize: 12 }}>Contact Us</a>
-              <Link href="/privacy" style={{ color: "var(--muted)", fontSize: 12 }}>Privacy Policy</Link>
-              <Link href="/terms" style={{ color: "var(--muted)", fontSize: 12 }}>Terms of Service</Link>
+              <h4 style={{ color: "var(--text)", fontSize: 12, fontWeight: 700, marginBottom: 8 }}>{T("landing_footer_support")}</h4>
+              <a href="mailto:support@eztradeapp.com" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_contact")}</a>
+              <Link href="/privacy" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_privacy")}</Link>
+              <Link href="/terms" style={{ color: "var(--muted)", fontSize: 12 }}>{T("landing_footer_terms")}</Link>
             </div>
           </div>
           <div className="landing-footer-bottom" style={{ color: "var(--muted)" }}>
             <p style={{ margin: 0 }}>&copy; 2026 EZtrade. All rights reserved.</p>
             <p style={{ margin: "4px 0 0", fontSize: 10 }}>
-              Constant updates &bull; World-class support &bull; Community-driven development
+              {T("landing_footer_updates")}
             </p>
           </div>
         </div>
@@ -574,13 +549,8 @@ export default function LandingPage() {
 
 function LandingNav() {
   const [langOpen, setLangOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<LangCode>("en");
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("eztrade_lang") as LangCode | null;
-    if (saved) setCurrentLang(saved);
-  }, []);
+  const { T, lang, setLang } = useI18n();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -592,13 +562,11 @@ function LandingNav() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const currentName = SUPPORTED_LANGUAGES.find((l) => l.code === currentLang)?.name ?? "English";
+  const currentName = SUPPORTED_LANGUAGES.find((l) => l.code === lang)?.name ?? "English";
 
   function selectLang(code: LangCode) {
-    localStorage.setItem("eztrade_lang", code);
-    setCurrentLang(code);
+    setLang(code);
     setLangOpen(false);
-    window.location.reload();
   }
 
   return (
@@ -619,17 +587,17 @@ function LandingNav() {
             </button>
             {langOpen && (
               <div className="top-header-lang-menu" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                {SUPPORTED_LANGUAGES.map((lang) => (
+                {SUPPORTED_LANGUAGES.map((l) => (
                   <button
-                    key={lang.code}
+                    key={l.code}
                     className="top-header-lang-option"
                     style={{
-                      background: lang.code === currentLang ? "var(--accent)" : "transparent",
-                      color: lang.code === currentLang ? "#fff" : "var(--text)",
+                      background: l.code === lang ? "var(--accent)" : "transparent",
+                      color: l.code === lang ? "#fff" : "var(--text)",
                     }}
-                    onClick={() => selectLang(lang.code)}
+                    onClick={() => selectLang(l.code)}
                   >
-                    {lang.name}
+                    {l.name}
                   </button>
                 ))}
               </div>
@@ -640,7 +608,7 @@ function LandingNav() {
             className="landing-nav-signin"
             style={{ color: "var(--accent)" }}
           >
-            Sign In
+            {T("landing_signin")}
           </Link>
         </div>
       </div>
