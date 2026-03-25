@@ -241,6 +241,47 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* -- SECTION 3.5: PROP FIRM MODE CALLOUT -- */}
+      <section className="landing-section landing-section-alt">
+        <div className="landing-container" style={{ maxWidth: 700, textAlign: "center" }}>
+          <div
+            style={{
+              background: "var(--bg)",
+              border: "2px solid var(--accent)",
+              borderRadius: 16,
+              padding: "36px 28px",
+            }}
+          >
+            <div style={{ fontSize: 32, marginBottom: 12 }}>{"\uD83C\uDFE2"}</div>
+            <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>
+              Built for Prop Firm Traders
+            </h2>
+            <p style={{ color: "var(--muted)", fontSize: 15, lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
+              Track daily loss limits, manage funded accounts, and stay within your drawdown rules.
+              EZtrade&apos;s Prop Firm Mode lets you set max daily loss and trailing drawdown thresholds
+              so you never violate your funded account rules.
+            </p>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 20, flexWrap: "wrap" }}>
+              {["Daily Loss Limits", "Drawdown Tracking", "Funded Account Rules", "Real-time Alerts"].map((f) => (
+                <span
+                  key={f}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    padding: "4px 12px",
+                    borderRadius: 9999,
+                    background: "rgba(74,144,217,0.12)",
+                    color: "var(--accent)",
+                  }}
+                >
+                  {f}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* -- SECTION 4: TRADING JOURNAL SUCCESS STATS -- */}
       <section className="landing-section landing-section-alt">
         <div className="landing-container" style={{ textAlign: "center" }}>
@@ -392,6 +433,23 @@ export default function LandingPage() {
                 <h3 className="landing-price-name">{T("landing_pro")}</h3>
                 {yearly ? (
                   <>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                      <span style={{ fontSize: 14, color: "var(--muted)", textDecoration: "line-through" }}>
+                        $9.99
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          padding: "2px 8px",
+                          borderRadius: 9999,
+                          background: "rgba(76,175,80,0.15)",
+                          color: "var(--profit)",
+                        }}
+                      >
+                        {T("landing_save")}
+                      </span>
+                    </div>
                     <div className="landing-price-amount">
                       <span className="landing-price-dollar" style={{ color: "var(--profit)", fontSize: 42, transition: "font-size 0.3s" }}>
                         $7.91
@@ -403,20 +461,6 @@ export default function LandingPage() {
                     <p style={{ fontSize: 12, marginTop: 4, color: "var(--muted)" }}>
                       {T("landing_billed_yearly")}
                     </p>
-                    <span
-                      style={{
-                        display: "inline-block",
-                        fontSize: 10,
-                        fontWeight: 700,
-                        padding: "2px 8px",
-                        borderRadius: 9999,
-                        background: "rgba(76,175,80,0.15)",
-                        color: "var(--profit)",
-                        marginTop: 4,
-                      }}
-                    >
-                      {T("landing_save")}
-                    </span>
                   </>
                 ) : (
                   <>
@@ -508,7 +552,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* -- SECTION 9: FOOTER -- */}
+      {/* -- SECTION 9: BUILT FOR TRADERS -- */}
+      <section className="landing-section" style={{ paddingTop: 48, paddingBottom: 48 }}>
+        <div className="landing-container" style={{ textAlign: "center", maxWidth: 600 }}>
+          <h2 className="landing-section-title" style={{ fontSize: 26 }}>
+            Built for Traders, by Traders
+          </h2>
+          <p style={{ color: "var(--muted)", fontSize: 15, lineHeight: 1.8, marginTop: 16 }}>
+            We trade every day. We built the tool we wished existed. EZtrade was born from thousands of hours
+            spent in front of charts, frustrated by clunky calculators and disconnected tools. Every feature
+            is designed by real traders who understand what you need to manage risk and stay disciplined.
+          </p>
+          <p style={{ color: "var(--text)", fontSize: 14, fontWeight: 600, marginTop: 16, fontStyle: "italic" }}>
+            &ldquo;We trade every day. We built the tool we wished existed.&rdquo;
+          </p>
+        </div>
+      </section>
+
+      {/* -- SECTION 10: FOOTER -- */}
       <footer className="landing-footer" style={{ background: "var(--card)", borderTop: "1px solid var(--border)" }}>
         <div className="landing-container landing-footer-inner">
           <div className="landing-footer-brand">

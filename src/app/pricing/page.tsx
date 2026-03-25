@@ -238,7 +238,16 @@ export default function PricingPage() {
                   <>
                     <div className="flex items-baseline gap-1 mt-1">
                       <span className="text-sm font-medium" style={{ color: "var(--muted)", textDecoration: "line-through" }}>
-                        $119.88/yr
+                        $9.99/mo
+                      </span>
+                      <span
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-full ml-1"
+                        style={{
+                          background: "rgba(76,175,80,0.15)",
+                          color: "var(--profit)",
+                        }}
+                      >
+                        SAVE 21%
                       </span>
                     </div>
                     <div className="flex items-baseline gap-1">
@@ -250,13 +259,10 @@ export default function PricingPage() {
                       </span>
                     </div>
                     <p className="text-[13px] mt-1" style={{ color: "var(--muted)" }}>
-                      Billed $94.95/year
+                      Billed annually at $94.95
                     </p>
                     <p className="text-xs font-bold mt-1" style={{ color: "var(--profit)" }}>
-                      You save $24.93
-                    </p>
-                    <p className="text-[11px] mt-0.5" style={{ color: "var(--profit)" }}>
-                      Get 2 months free!
+                      You save $24.93/year
                     </p>
                   </>
                 ) : (
@@ -270,7 +276,7 @@ export default function PricingPage() {
                       </span>
                     </div>
                     <p className="text-[11px] mt-1" style={{ color: "var(--warn)" }}>
-                      {"\u2191"} Switch to yearly and save $24.93
+                      {"\u2191"} Switch to yearly and save 21%
                     </p>
                   </>
                 )}

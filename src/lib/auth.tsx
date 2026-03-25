@@ -75,7 +75,7 @@ async function ensureUserDoc(user: User): Promise<UserDocResult> {
     return {
       tier: (data.tier as Tier) ?? "free",
       trialStart: data.trialStart?.toDate?.() ?? null,
-      trialDays: data.trialDays ?? 3,
+      trialDays: data.trialDays ?? 7,
     };
   }
 
@@ -85,11 +85,11 @@ async function ensureUserDoc(user: User): Promise<UserDocResult> {
     displayName: user.displayName ?? null,
     tier: "free" as Tier,
     trialStart: serverTimestamp(),
-    trialDays: 3,
+    trialDays: 7,
     createdAt: serverTimestamp(),
   });
 
-  return { tier: "free", trialStart: new Date(), trialDays: 3 };
+  return { tier: "free", trialStart: new Date(), trialDays: 7 };
 }
 
 // ---------------------------------------------------------------------------
